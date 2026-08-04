@@ -5,7 +5,7 @@
 <br>
 
 [![Email](https://img.shields.io/badge/Email-thakurashutosh042003@gmail.com-1f2328?style=flat-square&logo=gmail&logoColor=white)](mailto:thakurashutosh042003@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-1f2328?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/YOUR-HANDLE)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-1f2328?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ashutosh-thakur-8146121b0/)
 
 </div>
 
