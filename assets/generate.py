@@ -334,10 +334,12 @@ def build_terminal():
         "@keyframes scan{0%{transform:translateY(-60px)}100%{transform:translateY(300px)}}"
         "@keyframes glow{0%,100%{opacity:.35}50%{opacity:.85}}"
     )
+    # window controls on the accent ramp — macOS red/amber/green would drag a
+    # third palette into the README
     dots = "".join(
         f'<circle cx="{28 + i * 20}" cy="26" r="6" fill="{c}" opacity=".9" '
         f'style="animation:glow 3s ease-in-out infinite;animation-delay:-{i * 0.4}s"/>'
-        for i, c in enumerate(["#ff5f57", "#febc2e", "#28c840"])
+        for i, c in enumerate([PINK, VIOLET, CYAN])
     )
 
     body = (

@@ -25,17 +25,21 @@ OUT = Path(__file__).parent
 USER = sys.argv[1] if len(sys.argv) > 1 else "AshuArmada"
 TOP_N = 6
 
-# Loosely GitHub's language colours, but pulled apart so neighbouring segments in
-# the stacked bar stay distinguishable (GitHub's TypeScript and Python are both blue).
-COLORS = {
-    "TypeScript": "#4f9df7", "Python": "#56d364", "JavaScript": "#f1e05a",
-    "CSS": "#a970ff", "C#": "#ff7b72", "HTML": "#ffa657", "C++": "#f778ba",
-    "C": "#8f9bab", "Java": "#d0a441", "Shell": "#7ee787", "Dockerfile": "#5f7f8c",
-    "Jinja": "#d1553f", "Mako": "#9aa1ab", "Jupyter Notebook": "#ff9f45",
-    "SCSS": "#e07aa5", "Go": "#39c5cf", "Rust": "#e08a5a", "Ruby": "#e0575b",
-    "PHP": "#8f92d0", "Vue": "#41b883", "Svelte": "#ff5c2b", "Makefile": "#a6b0bf",
-}
-FALLBACK = ["#22d3ee", "#a78bfa", "#f472b6", "#7dd3fc", "#facc15", "#4ade80"]
+# Segments are coloured by rank from the accent ramp rather than by GitHub's
+# per-language colours — those drag green/yellow/orange into a cyan/violet/pink
+# system and make this card look unrelated to the rest of the README. The order
+# below walks the ramp in alternating steps so that adjacent segments — the ones
+# that actually touch in the bar — stay far apart in hue. Every segment is named
+# in the legend, so nothing depends on recognising a colour.
+RAMP = [
+    "#22d3ee",  # cyan     — accent 1
+    "#a78bfa",  # violet   — accent 2
+    "#38bdf8",  # sky
+    "#f472b6",  # pink     — accent 3
+    "#818cf8",  # indigo
+    "#d48afa",  # purple
+]
+OTHER = "#6b7688"  # neutral slate for the aggregated tail
 
 
 def api(url):
@@ -122,7 +126,7 @@ def build():
         top.append(("Other", rest))
 
     def color(i, name):
-        return COLORS.get(name, FALLBACK[i % len(FALLBACK)]) if name != "Other" else "#6b7688"
+        return OTHER if name == "Other" else RAMP[i % len(RAMP)]
 
     W, H = 900, 262
     BAR_X, BAR_Y, BAR_W, BAR_H = 40, 168, 820, 24
