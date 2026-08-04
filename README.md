@@ -1,10 +1,6 @@
 <div align="center">
 
-# Ashutosh Thakur
-
-**Full-stack developer · AI/ML**
-
-*Building tools that make hard things visible.*
+<img src="assets/header.svg" alt="Ashutosh Thakur — full-stack developer, AI/ML" />
 
 <br>
 
@@ -13,7 +9,7 @@
 
 </div>
 
-<br>
+<img src="assets/divider.svg" alt="" />
 
 I work across Python and JavaScript, mostly on the seam between machine learning and the web — LLM-backed tools, workflow automation, and developer tooling.
 
@@ -21,7 +17,19 @@ Right now I'm building **Gitify**, an app that teaches Git by animating what eac
 
 <br>
 
----
+<div align="center">
+<img src="assets/terminal.svg" alt="Terminal session: creating a branch, running an interactive rebase, and opening a Gitify lesson" />
+</div>
+
+<br>
+
+Every command you run gets drawn. Branch, commit, rebase, merge — the graph moves so you can see what the command did, instead of reading about it:
+
+<div align="center">
+<img src="assets/git-graph.svg" alt="Animated commit graph: a feature branch is created, takes three commits, and merges back into main while HEAD walks along" />
+</div>
+
+<img src="assets/divider.svg" alt="" />
 
 ### Featured
 
@@ -49,37 +57,33 @@ Regression models over historical air-quality data, with feature engineering and
 A message classifier built end to end: preprocessing, vectorization, model comparison.
 `Python` `NLP`
 
-<br>
+<img src="assets/divider.svg" alt="" />
 
----
-
-### Tools
-
-<br>
-
-![Python](https://img.shields.io/badge/Python-1f2328?style=flat-square&logo=python&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-1f2328?style=flat-square&logo=javascript&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-1f2328?style=flat-square&logo=typescript&logoColor=white)
-![C++](https://img.shields.io/badge/C++-1f2328?style=flat-square&logo=cplusplus&logoColor=white)
-
-![React](https://img.shields.io/badge/React-1f2328?style=flat-square&logo=react&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-1f2328?style=flat-square&logo=fastapi&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-1f2328?style=flat-square&logo=docker&logoColor=white)
-![Git](https://img.shields.io/badge/Git-1f2328?style=flat-square&logo=git&logoColor=white)
-
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1f2328?style=flat-square&logo=scikitlearn&logoColor=white)
-![pandas](https://img.shields.io/badge/pandas-1f2328?style=flat-square&logo=pandas&logoColor=white)
-![n8n](https://img.shields.io/badge/n8n-1f2328?style=flat-square&logo=n8n&logoColor=white)
-
-<br>
-
----
+### Activity
 
 <div align="center">
-<br>
+
+<img src="https://github-readme-stats.vercel.app/api?username=AshuArmada&show_icons=true&hide_border=true&include_all_commits=true&count_private=true&bg_color=0b1020&title_color=22d3ee&icon_color=a78bfa&text_color=8b949e&ring_color=a78bfa" height="165" alt="GitHub stats" />
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=AshuArmada&layout=compact&hide_border=true&langs_count=8&bg_color=0b1020&title_color=22d3ee&text_color=8b949e" height="165" alt="Most used languages" />
+
+<br><br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AshuArmada/AshuArmada/output/github-snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AshuArmada/AshuArmada/output/github-snake.svg" />
+  <img src="https://raw.githubusercontent.com/AshuArmada/AshuArmada/output/github-snake.svg" alt="A snake eating my contribution graph" />
+</picture>
+
+</div>
+
+<img src="assets/divider.svg" alt="" />
+
+<div align="center">
 
 **Open to collaborating on developer tools and applied-ML projects.**
 
 <sub>Reach me at [thakurashutosh042003@gmail.com](mailto:thakurashutosh042003@gmail.com)</sub>
+
+<img src="assets/footer.svg" alt="" />
 
 </div>
