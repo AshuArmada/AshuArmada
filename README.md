@@ -13,19 +13,11 @@
 
 I work across Python and JavaScript, mostly on the seam between machine learning and the web — LLM-backed tools, workflow automation, and developer tooling.
 
-Right now I'm building **Gitify**, an app that teaches Git by animating what each command actually does to your repository, backed by real sandboxed shells rather than a simulation.
-
 <br>
 
 <div align="center">
-<img src="assets/terminal.svg" alt="Terminal session: creating a branch, running an interactive rebase, and opening a Gitify lesson" />
-</div>
-
-<br>
-
-Every command you run gets drawn. Branch, commit, rebase, merge — the graph moves so you can see what the command did, instead of reading about it:
-
-<div align="center">
+<img src="assets/terminal.svg" alt="Terminal session: creating a branch, running an interactive rebase, and opening a lesson" />
+<br><br>
 <img src="assets/git-graph.svg" alt="Animated commit graph: a feature branch is created, takes three commits, and merges back into main while HEAD walks along" />
 </div>
 
@@ -63,8 +55,7 @@ A message classifier built end to end: preprocessing, vectorization, model compa
 
 <div align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=AshuArmada&show_icons=true&hide_border=true&include_all_commits=true&count_private=true&bg_color=0b1020&title_color=22d3ee&icon_color=a78bfa&text_color=8b949e&ring_color=a78bfa" height="165" alt="GitHub stats" />
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=AshuArmada&layout=compact&hide_border=true&langs_count=8&bg_color=0b1020&title_color=22d3ee&text_color=8b949e" height="165" alt="Most used languages" />
+<img src="assets/stats.svg" alt="Language breakdown across 15 public repositories" />
 
 <br><br>
 
