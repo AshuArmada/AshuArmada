@@ -13,13 +13,13 @@ import collections
 import json
 import os
 import sys
-import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from generate import CYAN, DIM, INK, MONO, PINK, REDUCED, SANS, VIOLET, card, esc, fmt, frame, svg
+from generate import (CYAN, DIM, EASE, INK, MONO, PINK, SANS, SKY, SPRING, VIOLET,
+                      card, esc, fmt, frame, svg)
 
 OUT = Path(__file__).parent
 USER = sys.argv[1] if len(sys.argv) > 1 else "AshuArmada"
@@ -46,18 +46,49 @@ def api(url):
         return json.load(r)
 
 
+CACHE = Path(__file__).parent / "stats-data.json"
+
+
 def collect():
-    user = api(f"https://api.github.com/users/{USER}")
-    repos = api(f"https://api.github.com/users/{USER}/repos?per_page=100&type=owner")
-    langs = collections.Counter()
+    """Fetch the numbers, falling back to the last good run.
+
+    Unauthenticated calls are capped at 60/hr and this makes one request per
+    repository, so a throttled run is normal. A partial result would silently
+    understate the language spread, so anything less than a clean sweep falls
+    back to the cache rather than overwriting it.
+    """
+    cache = json.loads(CACHE.read_text()) if CACHE.exists() else {}
+    try:
+        user = api(f"https://api.github.com/users/{USER}")
+        repos = [r for r in api(f"https://api.github.com/users/{USER}/repos?per_page=100&type=owner")
+                 if not r.get("fork")]
+    except (OSError, ValueError) as e:
+        if not cache:
+            raise
+        print(f"  ! {e} — using cached stats from {cache['fetched']}", file=sys.stderr)
+        return cache["created_at"], cache["repos"], collections.Counter(cache["languages"])
+
+    langs, failed = collections.Counter(), 0
     for r in repos:
-        if r.get("fork"):
-            continue
         try:
             langs.update(api(r["languages_url"]))
-        except urllib.error.HTTPError as e:
-            print(f"  ! skipped {r['name']}: {e}", file=sys.stderr)
-    return user, [r for r in repos if not r.get("fork")], langs
+        except (OSError, ValueError) as e:
+            failed += 1
+            print(f"  ! {r['name']}: {e}", file=sys.stderr)
+
+    if failed and cache:
+        print(f"  ! {failed} repo(s) unread — keeping cached stats from {cache['fetched']}", file=sys.stderr)
+        return cache["created_at"], cache["repos"], collections.Counter(cache["languages"])
+    if failed:
+        raise SystemExit(f"{failed} repositories unreadable and no cache to fall back on")
+
+    CACHE.write_text(json.dumps({
+        "fetched": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "created_at": user["created_at"],
+        "repos": len(repos),
+        "languages": dict(langs.most_common()),
+    }, indent=1))
+    return user["created_at"], len(repos), langs
 
 
 def human_bytes(n):
@@ -82,7 +113,7 @@ def tile(x, value, label, accent, delay):
 
 
 def build():
-    user, repos, langs = collect()
+    created_at, repo_count, langs = collect()
     total = sum(langs.values()) or 1
     ranked = langs.most_common()
     top = ranked[:TOP_N]
@@ -123,12 +154,12 @@ def build():
         )
         lx += 34 + len(label) * 7.1
 
-    created = datetime.strptime(user["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+    created = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
     tiles = (
-        tile(40, str(len(repos)), "public repos", CYAN, 0.05)
+        tile(40, str(repo_count), "public repos", CYAN, 0.05)
         + tile(248, str(len(langs)), "languages", VIOLET, 0.15)
         + tile(456, human_bytes(total), "of source", PINK, 0.25)
-        + tile(664, created.strftime("%b %Y"), "first push", "#7dd3fc", 0.35)
+        + tile(664, created.strftime("%b %Y"), "first push", SKY, 0.35)
     )
 
     style = (
@@ -136,10 +167,10 @@ def build():
         "@keyframes grow{0%{transform:scaleX(0)}14%,100%{transform:scaleX(1)}}"
         "@keyframes rise{0%{opacity:0;transform:translateY(6px)}11%,100%{opacity:1;transform:translateY(0)}}"
         "@keyframes sheen{0%,42%{transform:translateX(-220px)}70%,100%{transform:translateX(900px)}}"
-        ".tile{opacity:0;animation:tile 11s cubic-bezier(.2,.9,.3,1) infinite}"
-        ".grow{transform-origin:0 0;animation:grow 11s cubic-bezier(.2,.9,.3,1) infinite}"
-        ".rise{opacity:0;animation:rise 11s ease-out infinite}"
-        ".sheen{animation:sheen 11s ease-in-out infinite}" + REDUCED
+        f".tile{{opacity:0;animation:tile 11s {EASE} infinite}}"
+        f".grow{{transform-origin:0 0;animation:grow 11s {EASE} infinite}}"
+        f".rise{{opacity:0;animation:rise 11s {EASE} infinite}}"
+        ".sheen{animation:sheen 11s ease-in-out infinite}"
     )
 
     body = (
@@ -155,7 +186,7 @@ def build():
         + f'<rect width="{W}" height="{H}" fill="url(#bg)"/>'
         + f'<rect width="{W}" height="{H}" fill="url(#grid)"/>'
         + f'<text x="40" y="40" font-family="{MONO}" font-size="14" fill="{DIM}">'
-        f"language breakdown &#183; {len(repos)} public repositories</text>"
+        f"language breakdown &#183; {repo_count} public repositories</text>"
         + tiles
         + f'<rect x="{BAR_X}" y="{BAR_Y}" width="{BAR_W}" height="{BAR_H}" rx="{BAR_H // 2}" '
         'fill="#ffffff" fill-opacity=".05"/>'
@@ -166,7 +197,7 @@ def build():
         + frame(W, H)
     )
     (OUT / "stats.svg").write_text(svg(W, H, f"{USER} language breakdown", body, style), encoding="utf-8")
-    print(f"wrote stats.svg — {len(repos)} repos, {len(langs)} languages, {human_bytes(total)}")
+    print(f"wrote stats.svg - {repo_count} repos, {len(langs)} languages, {human_bytes(total)}")
 
 
 if __name__ == "__main__":
