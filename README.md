@@ -1,31 +1,37 @@
-<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg" />
+  <img src="assets/header-light.svg" alt="Ashutosh Thakur — full-stack developer, AI/ML" />
+</picture>
 
-<img src="assets/header.svg" alt="Ashutosh Thakur — full-stack developer, AI/ML" />
+<a href="mailto:thakurashutosh042003@gmail.com"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/chip-email-dark.svg" />
+  <img src="assets/chip-email-light.svg" alt="Email: thakurashutosh042003@gmail.com" />
+</picture></a>
+<a href="https://www.linkedin.com/in/ashutosh-thakur-8146121b0/"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/chip-linkedin-dark.svg" />
+  <img src="assets/chip-linkedin-light.svg" alt="LinkedIn: ashutosh-thakur" />
+</picture></a>
 
-<br>
-
-[![Email](https://img.shields.io/badge/Email-thakurashutosh042003@gmail.com-0b1020?style=flat-square&logo=gmail&logoColor=22d3ee&labelColor=141a30)](mailto:thakurashutosh042003@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0b1020?style=flat-square&logo=linkedin&logoColor=a78bfa&labelColor=141a30)](https://www.linkedin.com/in/ashutosh-thakur-8146121b0/)
-
-</div>
-
-<img src="assets/divider.svg" alt="" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/divider-dark.svg" />
+  <img src="assets/divider-light.svg" alt="" />
+</picture>
 
 I work across Python and JavaScript, mostly on the seam between machine learning and the web — LLM-backed tools, workflow automation, and developer tooling.
 
-<br>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg" />
+  <img src="assets/activity-light.svg" alt="Animated graph of my most recent commits, drawn from the GitHub API" />
+</picture>
 
-<div align="center">
-<img src="assets/terminal.svg" alt="Terminal session: creating a branch, running an interactive rebase, and opening a lesson" />
-<br><br>
-<img src="assets/git-graph.svg" alt="Animated commit graph: a feature branch is created, takes three commits, and merges back into main while HEAD walks along" />
-</div>
+<sub>Not a mockup — that's my actual commit history, redrawn daily from the GitHub API by [a workflow](.github/workflows/refresh.yml).</sub>
 
-<img src="assets/divider.svg" alt="" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/divider-dark.svg" />
+  <img src="assets/divider-light.svg" alt="" />
+</picture>
 
 ### Featured
-
-<br>
 
 **[Gitify](https://github.com/AshuArmada/gitify)** — Interactive Git learning environment
 Ten structured lessons covering branching, merge conflicts, rebase, stash, cherry-pick, and bisect. Commands run against real Git repos in isolated server-side sandboxes, with animated commit trees and an interactive rebase editor. Falls back to an in-memory Git engine when offline.
@@ -49,32 +55,33 @@ Regression models over historical air-quality data, with feature engineering and
 A message classifier built end to end: preprocessing, vectorization, model comparison.
 `Python` `NLP`
 
-<img src="assets/divider.svg" alt="" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/divider-dark.svg" />
+  <img src="assets/divider-light.svg" alt="" />
+</picture>
 
-### Activity
+### What I build with
 
-<div align="center">
-
-<img src="assets/stats.svg" alt="Language breakdown across 15 public repositories" />
-
-<br><br>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/langs-dark.svg" />
+  <img src="assets/langs-light.svg" alt="Language breakdown across my public repositories" />
+</picture>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AshuArmada/AshuArmada/output/github-snake-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AshuArmada/AshuArmada/output/github-snake.svg" />
   <img src="https://raw.githubusercontent.com/AshuArmada/AshuArmada/output/github-snake.svg" alt="A snake eating my contribution graph" />
 </picture>
 
-</div>
-
-<img src="assets/divider.svg" alt="" />
-
-<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/divider-dark.svg" />
+  <img src="assets/divider-light.svg" alt="" />
+</picture>
 
 **Open to collaborating on developer tools and applied-ML projects.**
 
 <sub>Reach me at [thakurashutosh042003@gmail.com](mailto:thakurashutosh042003@gmail.com)</sub>
 
-<img src="assets/footer.svg" alt="" />
-
-</div>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg" />
+  <img src="assets/footer-light.svg" alt="" />
+</picture>

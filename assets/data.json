@@ -1,0 +1,73 @@
+{
+ "fetched": "2026-08-04",
+ "user": {
+  "login": "AshuArmada",
+  "created_at": "2024-10-26T10:19:09Z",
+  "repos": 15
+ },
+ "languages": {
+  "TypeScript": 672931,
+  "Python": 514498,
+  "JavaScript": 446306,
+  "CSS": 252448,
+  "C#": 13950,
+  "HTML": 4604,
+  "C++": 4567,
+  "Jinja": 2560,
+  "Dockerfile": 1948,
+  "Shell": 1735,
+  "Mako": 704,
+  "Java": 29
+ },
+ "commits": [
+  {
+   "repo": "informer-",
+   "branch": "main",
+   "sha": "558077d",
+   "message": "too many requests to github if users has ma\u2026",
+   "date": "2026-07-19T19:32:43Z"
+  },
+  {
+   "repo": "informer-",
+   "branch": "main",
+   "sha": "7424e4e",
+   "message": "handling  multiple requests",
+   "date": "2026-07-20T17:24:16Z"
+  },
+  {
+   "repo": "informer-",
+   "branch": "main",
+   "sha": "d5937a4",
+   "message": "update styling for improved layout and acce\u2026",
+   "date": "2026-07-24T17:41:56Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "branch": "main",
+   "sha": "4f95e4b",
+   "message": "overall changes",
+   "date": "2026-08-04T15:24:00Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "branch": "main",
+   "sha": "4a58935",
+   "message": "overall changes 2",
+   "date": "2026-08-04T15:24:12Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "branch": "main",
+   "sha": "3fd96d0",
+   "message": "updates",
+   "date": "2026-08-04T16:26:27Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "branch": "main",
+   "sha": "bbf47fa",
+   "message": "stat card",
+   "date": "2026-08-04T16:58:46Z"
+  }
+ ]
+}
