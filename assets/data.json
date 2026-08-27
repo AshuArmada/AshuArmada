@@ -1,16 +1,16 @@
 {
- "fetched": "2026-08-26",
+ "fetched": "2026-08-27",
  "user": {
   "login": "AshuArmada",
   "created_at": "2024-10-26T10:19:09Z",
   "repos": 16
  },
  "languages": {
-  "Python": 683694,
+  "Python": 848329,
   "TypeScript": 672931,
-  "JavaScript": 451944,
-  "CSS": 290281,
-  "HTML": 73393,
+  "JavaScript": 455533,
+  "CSS": 297792,
+  "HTML": 98615,
   "C#": 13950,
   "Batchfile": 7334,
   "C++": 4567,
@@ -45,30 +45,16 @@
   {
    "repo": "ReelFactory",
    "branch": "master",
-   "sha": "bb42492",
-   "message": "Add delete for finished videos and captions",
-   "date": "2026-08-11T19:52:10Z"
+   "sha": "61a0799",
+   "message": "file cahnges before ist demo",
+   "date": "2026-08-13T08:19:24Z"
   },
   {
    "repo": "ReelFactory",
    "branch": "master",
-   "sha": "111163e",
-   "message": "Let the version picker select several scrip\u2026",
-   "date": "2026-08-11T20:07:54Z"
-  },
-  {
-   "repo": "ReelFactory",
-   "branch": "master",
-   "sha": "cc1a890",
-   "message": "Let a script be named, saved, and reused ac\u2026",
-   "date": "2026-08-11T20:28:16Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "branch": "main",
-   "sha": "6af503c",
-   "message": "chore: refresh profile assets",
-   "date": "2026-08-23T04:08:46Z"
+   "sha": "0d6e504",
+   "message": "final changes phase 1",
+   "date": "2026-08-13T08:19:43Z"
   },
   {
    "repo": "AshuArmada",
@@ -83,6 +69,20 @@
    "sha": "5f719df",
    "message": "chore: refresh profile assets",
    "date": "2026-08-25T04:08:41Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "branch": "main",
+   "sha": "33f0d79",
+   "message": "chore: refresh profile assets",
+   "date": "2026-08-26T04:10:06Z"
+  },
+  {
+   "repo": "ReelFactory",
+   "branch": "master",
+   "sha": "7ec5380",
+   "message": "Merge pull request #2 from AshuArmada/new",
+   "date": "2026-08-27T10:03:13Z"
   }
  ]
 }
