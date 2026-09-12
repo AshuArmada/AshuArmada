@@ -1,12 +1,12 @@
 {
- "fetched": "2026-09-11",
+ "fetched": "2026-09-12",
  "user": {
   "login": "AshuArmada",
   "created_at": "2024-10-26T10:19:09Z",
   "repos": 16
  },
  "languages": {
-  "Python": 848329,
+  "Python": 868242,
   "TypeScript": 672931,
   "JavaScript": 455533,
   "CSS": 297792,
@@ -22,25 +22,11 @@
  },
  "commits": [
   {
-   "repo": "informer-",
-   "branch": "main",
-   "sha": "558077d",
-   "message": "too many requests to github if users has ma\u2026",
-   "date": "2026-07-19T19:32:43Z"
-  },
-  {
-   "repo": "informer-",
-   "branch": "main",
-   "sha": "7424e4e",
-   "message": "handling  multiple requests",
-   "date": "2026-07-20T17:24:16Z"
-  },
-  {
-   "repo": "informer-",
-   "branch": "main",
-   "sha": "d5937a4",
-   "message": "update styling for improved layout and acce\u2026",
-   "date": "2026-07-24T17:41:56Z"
+   "repo": "study",
+   "branch": "master",
+   "sha": "8059ad4",
+   "message": "opposit of paattern1",
+   "date": "2026-08-09T14:07:18Z"
   },
   {
    "repo": "ReelFactory",
@@ -66,13 +52,6 @@
   {
    "repo": "AshuArmada",
    "branch": "main",
-   "sha": "911cac1",
-   "message": "chore: refresh profile assets",
-   "date": "2026-09-08T08:16:10Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "branch": "main",
    "sha": "3a3b981",
    "message": "chore: refresh profile assets",
    "date": "2026-09-09T08:19:07Z"
@@ -83,6 +62,27 @@
    "sha": "502e6a5",
    "message": "chore: refresh profile assets",
    "date": "2026-09-10T08:19:29Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "branch": "main",
+   "sha": "ad59943",
+   "message": "chore: refresh profile assets",
+   "date": "2026-09-11T08:13:36Z"
+  },
+  {
+   "repo": "study",
+   "branch": "master",
+   "sha": "3724aa8",
+   "message": "liner regression 1st commit",
+   "date": "2026-09-11T18:10:04Z"
+  },
+  {
+   "repo": "study",
+   "branch": "master",
+   "sha": "12eb202",
+   "message": "done with pandas",
+   "date": "2026-09-11T19:01:46Z"
   }
  ]
 }
