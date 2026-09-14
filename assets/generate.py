@@ -14,8 +14,8 @@ DATA = json.loads((OUT / 'data.json').read_text(encoding='utf-8'))
 SANS = 'Arial,Helvetica,sans-serif'
 MONO = 'Consolas,monospace'
 THEMES = {
-    'dark': dict(panel='#151c25', ink='#f0f4f8', dim='#9aaabd', line='#303d4c', accent='#b6f36a', blue='#89aaff'),
-    'light': dict(panel='#f3f6f9', ink='#142130', dim='#526477', line='#d4dee7', accent='#416d11', blue='#315ed0'),
+    'dark': dict(panel='#151c25', ink='#f0f4f8', dim='#9aaabd', line='#303d4c', accent='#b6f36a', blue='#89aaff', cards=['#a5b4fc', '#5eead4', '#f9a8d4', '#fcd34d', '#7dd3fc', '#c4b5fd']),
+    'light': dict(panel='#f3f6f9', ink='#142130', dim='#526477', line='#d4dee7', accent='#416d11', blue='#315ed0', cards=['#4338ca', '#0f766e', '#be185d', '#92400e', '#0369a1', '#6d28d9']),
 }
 
 
@@ -64,19 +64,25 @@ PROJECT_END = '<!-- PROJECTS:END -->'
 
 def project(t, p, number):
     name = p['name']
+    accent = t['cards'][int(p['id']) % len(t['cards'])]
+    wash = f'card-wash-{int(p["id"])}'
     description = p.get('description') or 'Explore the code and project details on GitHub.'
     names = textwrap.wrap(name, width=32, max_lines=2, placeholder='...')
-    lines = textwrap.wrap(description, width=49, max_lines=3, placeholder='...')
+    lines = textwrap.wrap(description, width=49, max_lines=2, placeholder='...')
     status = 'ARCHIVED' if p.get('archived') else ('FORK' if p.get('fork') else 'PUBLIC REPOSITORY')
-    b = rect(1, 1, 438, 231, t['panel'], 14, t['line'])
+    b = f'<defs><linearGradient id="{wash}" x2="1" y2="1"><stop stop-color="{accent}" stop-opacity=".16"/><stop offset="1" stop-color="{accent}" stop-opacity=".02"/></linearGradient></defs>'
+    b += rect(1, 1, 438, 231, t['panel'], 14, t['line'])
+    b += rect(1, 1, 438, 231, f'url(#{wash})', 14)
+    b += rect(24, 1, 88, 4, accent, 2)
+    b += f'<path d="M350 16h64v64M366 16v48h48" fill="none" stroke="{accent}" stroke-opacity=".12"/>'
     b += text(24, 34, f'{number:02d} / {status}', t['dim'], 11, 400, True)
-    b += text(401, 36, '\u2197', t['accent'], 24)
+    b += text(401, 36, '\u2197', accent, 24)
     for i, line in enumerate(names):
-        b += text(24, 72+i*24, line, t['ink'], 19, 700, True)
+        b += text(24, 72+i*24, line, accent, 19, 700, True)
     for i, line in enumerate(lines):
         b += text(24, 124+i*19, line, t['dim'], 12, mono=True)
     b += f'<path d="M24 184H416" stroke="{t["line"]}"/>'
-    b += text(24, 211, (p.get('language') or 'CODE / EXPERIMENTS')[:40], t['blue'], 12, 400, True)
+    b += text(24, 211, (p.get('language') or 'CODE / EXPERIMENTS')[:40], accent, 12, 400, True)
     return svg(440, 232, f'{name}: {description}', b)
 
 
@@ -100,7 +106,17 @@ def updated_readme(projects):
         raise ValueError('README must contain exactly one PROJECTS:START / PROJECTS:END block')
     before, rest = content.split(PROJECT_START)
     _, after = rest.split(PROJECT_END)
-    return path, before + PROJECT_START + '\n' + project_gallery(projects) + '\n' + PROJECT_END + after
+    content = before + PROJECT_START + '\n' + project_gallery(projects) + '\n' + PROJECT_END + after
+    start, end = '<!-- CONTRIBUTIONS:START -->', '<!-- CONTRIBUTIONS:END -->'
+    if start in content or end in content:
+        if content.count(start) != 1 or content.count(end) != 1:
+            raise ValueError('README contribution markers must appear exactly once')
+        before, rest = content.split(start)
+        _, after = rest.split(end)
+        links = [f'<a href="{escape(p["url"], quote=True)}">{escape(p["repo"])} #{p["number"]}</a>'
+                 for p in DATA.get('contributions', {}).get('items', [])]
+        content = before + start + '\n' + ' ? '.join(links) + '\n' + end + after
+    return path, content
 
 
 def activity(t):
@@ -127,6 +143,38 @@ def activity(t):
         b += text(26, 94, 'No recent commits in this snapshot.', t['dim'])
     b += text(26, h-22, 'GITHUB API  /  Latest commits across public repositories', t['dim'], 11, 400, True)
     return svg(900, h, 'Recent GitHub commits. Snapshot from '+DATA['fetched'], b)
+
+
+def contributions(t):
+    data = DATA.get('contributions')
+    items = data['items'] if data else []
+    h = 128 + max(len(items), 1) * 76
+    b = rect(1, 1, 898, h-2, t['panel'], 16, t['line'])
+    b += rect(26, 1, 140, 4, t['cards'][2], 2)
+    b += text(26, 38, 'BEYOND MY REPOSITORIES', t['cards'][2], 15, 700, True)
+    label = f'{data["total"]} PUBLIC PULL REQUESTS' if data else 'AWAITING FIRST REFRESH'
+    b += text(874, 38, label, t['dim'], 12, mono=True, extra='text-anchor="end"')
+    b += f'<path d="M26 60H874" stroke="{t["line"]}"/>'
+    for i, item in enumerate(items):
+        y = 98 + i * 76
+        color = {'merged': t['cards'][5], 'open': t['cards'][1], 'closed': t['cards'][2]}[item['state']]
+        title = textwrap.shorten(item['title'], width=70, placeholder='...')
+        repo = item['repo']
+        if len(repo) > 69:
+            repo = repo[:66] + '...'
+        b += text(26, y, title, t['ink'], 14, 700, True)
+        b += text(26, y+24, f'{repo} / #{item["number"]}', t['dim'], 12, mono=True)
+        b += rect(776, y-19, 98, 28, t['panel'], 14, color)
+        b += text(825, y, item['state'].upper(), color, 11, 700, True, extra='text-anchor="middle"')
+        if i < len(items)-1:
+            b += f'<path d="M26 {y+42}H874" stroke="{t["line"]}"/>'
+    if not items:
+        message = 'No public pull requests to other repositories found yet.' if data else 'Contribution data will appear after a successful refresh.'
+        b += text(26, 105, message, t['ink'], 19)
+        b += text(26, 137, 'A place for fixes, ideas, and collaboration beyond my own projects.', t['dim'], 14)
+    b += text(26, h-24, 'RECENTLY UPDATED / External pull requests authored by me', t['dim'], 11, mono=True)
+    b += text(874, h-24, DATA['fetched'], t['dim'], 11, mono=True, extra='text-anchor="end"')
+    return svg(900, h, 'Cross-repository contributions: public pull requests to other owners. ' + label, b)
 
 
 def langs(t):
@@ -167,7 +215,7 @@ def chip(t, label):
 
 
 def build():
-    builders = dict(header=header, activity=activity, langs=langs, footer=footer)
+    builders = dict(header=header, activity=activity, langs=langs, footer=footer, contributions=contributions)
     builders['chip-email'] = lambda t: chip(t, 'Say hello')
     builders['chip-linkedin'] = lambda t: chip(t, 'LinkedIn')
     if 'projects' not in DATA:

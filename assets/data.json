@@ -4,7 +4,7 @@
   "repos": 16
  },
  "languages": {
-  "Python": 868242,
+  "Python": 861431,
   "TypeScript": 672931,
   "JavaScript": 455533,
   "CSS": 297792,
@@ -33,7 +33,7 @@
    "id": 1090679248,
    "name": "aqi",
    "url": "https://github.com/AshuArmada/aqi",
-   "description": "",
+   "description": "A small pipeline that fetches air-quality and weather data from the Open-Meteo API, engineers time-series features, and",
    "language": "Python",
    "fork": false,
    "archived": false,
@@ -43,7 +43,7 @@
    "id": 1322846750,
    "name": "AshuArmada",
    "url": "https://github.com/AshuArmada/AshuArmada",
-   "description": "",
+   "description": "I build at the intersection of the web and machine learning \u2014 LLM-backed tools, useful automations, and developer experiences that make complex things easier to understand. Public repositories with a README, updated automatically every...",
    "language": "Python",
    "fork": false,
    "archived": false,
@@ -53,7 +53,7 @@
    "id": 1265444681,
    "name": "gitify",
    "url": "https://github.com/AshuArmada/gitify",
-   "description": "",
+   "description": "Gitify is an interactive Web + API learning application designed to teach Git and GitHub concepts visually. It translates command-line workflows into animated simulations so learners can see files, commits, branches, conflicts, remotes,...",
    "language": "JavaScript",
    "fork": false,
    "archived": false,
@@ -63,7 +63,7 @@
    "id": 1301928220,
    "name": "informer-",
    "url": "https://github.com/AshuArmada/informer-",
-   "description": "",
+   "description": "A personal, local-only dashboard with two features: Trending feed \u2014 GitHub trending repos, ranked by star velocity, updating live via SSE. (not built yet)",
    "language": "TypeScript",
    "fork": false,
    "archived": false,
@@ -73,7 +73,7 @@
    "id": 1294163791,
    "name": "nexus-retool",
    "url": "https://github.com/AshuArmada/nexus-retool",
-   "description": "",
+   "description": "A no-code dashboard builder where customers connect REST/SQL data sources and an LLM assistant generates ready-to-edit dashboard layouts. Built-in component library covers charts, tables, file uploads, chat, knowledge graphs, and more....",
    "language": "TypeScript",
    "fork": false,
    "archived": false,
@@ -83,7 +83,7 @@
    "id": 1324097908,
    "name": "ReelFactory",
    "url": "https://github.com/AshuArmada/ReelFactory",
-   "description": "",
+   "description": "Drop product photos in a folder, fill in a few facts, run one command. You get a narrated vertical video with on-screen text and a ready-to-paste Facebook",
    "language": "Python",
    "fork": false,
    "archived": false,
@@ -93,7 +93,7 @@
    "id": 1115654013,
    "name": "REVCLERX_ASHUTOSH_RESUME_ANALYSER",
    "url": "https://github.com/AshuArmada/REVCLERX_ASHUTOSH_RESUME_ANALYSER",
-   "description": "AN AI MATCHING SYSTEM BUILT WITH N8N AND AI MODEL USED -GOOGLE GEMINI",
+   "description": "AN AI MATCHING SYSTEM BUILT WITH N8N AND AI MODEL USED -GOOGLE GEMINI TO USE THE PROJECT SIMPLY IMPORT THE PROVIDED FILE TO N8N",
    "language": "",
    "fork": false,
    "archived": false,
@@ -103,7 +103,7 @@
    "id": 1039482909,
    "name": "spam-ham",
    "url": "https://github.com/AshuArmada/spam-ham",
-   "description": "a simple ai project that classifies whether a message is spam or ham",
+   "description": "A machine learning project that classifies text messages as Spam or Ham using: \ud83d\udd0d TF-IDF vectorization",
    "language": "Python",
    "fork": false,
    "archived": false,
@@ -125,21 +125,68 @@
   },
   {
    "repo": "AshuArmada",
-   "sha": "ea790d6",
-   "message": "chore: refresh profile assets",
-   "date": "2026-09-12T08:04:16Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "sha": "6f39479",
-   "message": "chore: refresh profile assets",
-   "date": "2026-09-13T08:28:54Z"
-  },
-  {
-   "repo": "AshuArmada",
    "sha": "3486d4a",
    "message": "chore: refresh profile assets",
    "date": "2026-09-14T09:10:52Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "sha": "59e06a1",
+   "message": "update1.1",
+   "date": "2026-09-14T10:23:06Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "sha": "cd28890",
+   "message": "Merge origin/main and preserve README-drive\u2026",
+   "date": "2026-09-14T10:24:33Z"
   }
- ]
+ ],
+ "contributions": {
+  "total": 26,
+  "items": [
+   {
+    "repo": "DhruvSharma-05/crafted-captured",
+    "number": 18,
+    "title": "button updated",
+    "url": "https://github.com/DhruvSharma-05/crafted-captured/pull/18",
+    "state": "merged"
+   },
+   {
+    "repo": "DhruvSharma-05/crafted-captured",
+    "number": 17,
+    "title": "mobile view problems resolved",
+    "url": "https://github.com/DhruvSharma-05/crafted-captured/pull/17",
+    "state": "merged"
+   },
+   {
+    "repo": "DhruvSharma-05/crafted-captured",
+    "number": 16,
+    "title": "Gurkirat3",
+    "url": "https://github.com/DhruvSharma-05/crafted-captured/pull/16",
+    "state": "merged"
+   },
+   {
+    "repo": "DhruvSharma-05/crafted-captured",
+    "number": 14,
+    "title": "Iteration 02",
+    "url": "https://github.com/DhruvSharma-05/crafted-captured/pull/14",
+    "state": "merged"
+   },
+   {
+    "repo": "DhruvSharma-05/crafted-captured",
+    "number": 13,
+    "title": "quote added",
+    "url": "https://github.com/DhruvSharma-05/crafted-captured/pull/13",
+    "state": "merged"
+   },
+   {
+    "repo": "DhruvSharma-05/crafted-captured",
+    "number": 12,
+    "title": "Gurkirat3",
+    "url": "https://github.com/DhruvSharma-05/crafted-captured/pull/12",
+    "state": "merged"
+   }
+  ]
+ }
 }
