@@ -4,11 +4,11 @@ Pulls the real numbers and the real commit history into assets/data.json.
 
     python assets/fetch.py [username]
 
-Unauthenticated GitHub allows 60 requests/hr and this makes roughly one per
+Unauthenticated GitHub allows 60 requests/hr and this makes roughly two per
 repository, so throttled runs are normal. Anything short of a clean sweep keeps
 the previous data.json rather than overwriting good data with a partial read.
 
-Set GITHUB_TOKEN for a higher limit; .github/workflows/stats.yml does.
+Set GITHUB_TOKEN for a higher limit; .github/workflows/refresh.yml does.
 """
 
 import collections
@@ -24,8 +24,8 @@ OUT = Path(__file__).parent
 DATA = OUT / "data.json"
 USER = sys.argv[1] if len(sys.argv) > 1 else "AshuArmada"
 
-LANES = 3      # repositories shown as lanes in the activity graph
-COMMITS = 9    # commits drawn across those lanes
+LANES = 3      # recent repositories sampled for the build log
+COMMITS = 5    # entries displayed by the build log
 
 
 def api(url):
@@ -43,14 +43,34 @@ def tidy(message):
     return line if len(line) <= 44 else line[:43].rstrip() + "…"
 
 
+def fetch_repositories(username):
+    """Read every page so the gallery also works for accounts with 100+ repos."""
+    repos, page = [], 1
+    while True:
+        batch = api(f"https://api.github.com/users/{username}/repos?per_page=100&type=owner&page={page}")
+        repos.extend(r for r in batch if not r.get("private"))
+        if len(batch) < 100:
+            return sorted(repos, key=lambda r: r["name"].casefold())
+        page += 1
+
+
+def has_readme(username, name):
+    """Ask GitHub for the repository README on its default branch."""
+    try:
+        api(f"https://api.github.com/repos/{username}/{name}/readme")
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return False
+        raise
+    return True
+
+
 def main():
     previous = json.loads(DATA.read_text(encoding="utf-8")) if DATA.exists() else None
     failed = []
 
     try:
-        user = api(f"https://api.github.com/users/{USER}")
-        repos = [r for r in api(f"https://api.github.com/users/{USER}/repos?per_page=100&type=owner")
-                 if not r.get("fork")]
+        repos = fetch_repositories(USER)
     except (OSError, ValueError) as e:
         if not previous:
             raise SystemExit(f"cannot reach the GitHub API and no cached data.json: {e}")
@@ -59,6 +79,10 @@ def main():
 
     languages = collections.Counter()
     for r in repos:
+        try:
+            r['has_readme'] = has_readme(USER, r['name'])
+        except (OSError, ValueError) as e:
+            failed.append(f"{r['name']} README: {e}")
         try:
             languages.update(api(r["languages_url"]))
         except (OSError, ValueError) as e:
@@ -88,7 +112,6 @@ def main():
         for c in found:
             commits.append({
                 "repo": r["name"],
-                "branch": r["default_branch"],
                 "sha": c["sha"][:7],
                 "message": tidy(c["commit"]["message"]),
                 "date": c["commit"]["author"]["date"],
@@ -107,8 +130,15 @@ def main():
 
     DATA.write_text(json.dumps({
         "fetched": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-        "user": {"login": USER, "created_at": user["created_at"], "repos": len(repos)},
+        "user": {"repos": len(repos)},
         "languages": dict(languages.most_common()),
+        "projects": [{
+            "id": r["id"], "name": r["name"], "url": r["html_url"],
+            "description": r.get("description") or "",
+            "language": r.get("language") or "",
+            "fork": bool(r.get("fork")), "archived": bool(r.get("archived")),
+            "has_readme": r['has_readme'],
+        } for r in repos if r['has_readme']],
         "commits": commits,
     }, indent=1), encoding="utf-8")
 

@@ -1,469 +1,195 @@
 #!/usr/bin/env python3
+"""Render GitHub-safe profile artwork. Run python assets/generate.py after fetch.py.
+
+All graphics are local SVGs with theme-specific palettes. Motion is CSS-only,
+with a complete static composition and a prefers-reduced-motion fallback.
 """
-Generates every animated SVG in the README, in a light and a dark colourway.
-
-    python assets/fetch.py      # refresh assets/data.json from the GitHub API
-    python assets/generate.py   # redraw the SVGs from it
-
-Two constraints shape everything here.
-
-GitHub renders a README on the *reader's* page background, and strips CSS from
-markdown, so there is no way to set that background. A dark panel therefore sits
-on a white page as a pasted-on rectangle. So nothing here draws a panel: the
-artwork is transparent and the ink colour swaps per theme, and the README picks
-a colourway with <picture media="(prefers-color-scheme: dark)">.
-
-And GitHub serves these through an image proxy where <script> never runs, so all
-motion is declarative SMIL + CSS.
-"""
-
 import json
-from datetime import datetime
+import textwrap
+from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).parent
-DATA = json.loads((OUT / "data.json").read_text(encoding="utf-8"))
-
-MONO = "ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace"
-SANS = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif"
-
-# One accent ramp, two colourways. The light values are darkened until they hold
-# 4.5:1 on white; build() prints the measured ratios so this stays honest.
+DATA = json.loads((OUT / 'data.json').read_text(encoding='utf-8'))
+SANS = 'Arial,Helvetica,sans-serif'
+MONO = 'Consolas,monospace'
 THEMES = {
-    "dark": {
-        "PAGE": "#0d1117", "INK": "#e6edf3", "DIM": "#8b949e", "FAINT": "#30363d",
-        "A1": "#22d3ee", "A2": "#a78bfa", "A3": "#f472b6", "A4": "#7dd3fc",
-    },
-    "light": {
-        "PAGE": "#ffffff", "INK": "#1f2328", "DIM": "#57606a", "FAINT": "#d0d7de",
-        "A1": "#0e7490", "A2": "#6d28d9", "A3": "#be185d", "A4": "#0369a1",
-    },
+    'dark': dict(panel='#151c25', ink='#f0f4f8', dim='#9aaabd', line='#303d4c', accent='#b6f36a', blue='#89aaff'),
+    'light': dict(panel='#f3f6f9', ink='#142130', dim='#526477', line='#d4dee7', accent='#416d11', blue='#315ed0'),
 }
 
-EASE = "cubic-bezier(.16,1,.3,1)"     # expo-out — entrances
-SPRING = "cubic-bezier(.2,1.5,.4,1)"  # overshoot — things that pop in
 
-BASE_CSS = "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
-
-
-def esc(s):
-    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+def text(x, y, value, color, size=14, weight=400, mono=False, extra=''):
+    return f'<text x="{x}" y="{y}" fill="{color}" font-family="{MONO if mono else SANS}" font-size="{size}" font-weight="{weight}" {extra}>{escape(str(value))}</text>'
 
 
-def fmt(x):
-    return f"{x:.4f}".rstrip("0").rstrip(".") or "0"
+def rect(x, y, w, h, fill, radius=0, stroke='none'):
+    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" fill="{fill}" stroke="{stroke}"/>'
 
 
-def contrast(fg, bg):
-    def lum(h):
-        c = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
-        c = [v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4 for v in c]
-        return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]
-    a, b = sorted((lum(fg), lum(bg)), reverse=True)
-    return (a + .05) / (b + .05)
+def svg(w, h, title, body, css=''):
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="{escape(title, quote=True)}">'
+            f'<title>{escape(title)}</title><style>{css}@media(prefers-reduced-motion:reduce){{*{{animation:none!important}}}}</style>{body}</svg>\n')
 
 
-def dedupe(frames):
-    out = []
-    for f in sorted(frames, key=lambda f: f[0]):
-        if out and abs(out[-1][0] - f[0]) < 1e-9:
-            out[-1] = f
-        else:
-            out.append(list(f))
-    return out
+def header(t):
+    b = rect(1, 1, 898, 378, t['panel'], 22, t['line'])
+    b += text(32, 40, 'AT / ASHUARMADA', t['ink'], 13, 700, True)
+    b += '<circle cx="690" cy="35" r="4" fill="'+t['accent']+'"/>'
+    b += text(705, 40, 'OPEN TO COLLAB', t['accent'], 12, 400, True)
+    b += f'<path d="M32 60H868" stroke="{t["line"]}"/>'
+    b += text(32, 99, 'FULL-STACK DEVELOPER  /  AI & ML', t['dim'], 12, 400, True)
+    b += text(28, 164, 'Ashutosh', t['ink'], 66, 700, extra='letter-spacing="-3"')
+    b += text(28, 231, 'Thakur.', t['ink'], 66, 700, extra='letter-spacing="-3"')
+    b += text(32, 277, 'Turning complex ideas', t['dim'], 22)
+    b += text(32, 307, 'into tools that just work.', t['ink'], 22)
+    # A wireframe orbital mark: native vector art, no external image dependencies.
+    b += f'<g transform="translate(718 202)" fill="none" stroke="{t["line"]}">'
+    b += '<circle r="108"/><circle r="80" stroke-dasharray="2 7"/><path d="M-132 0H132M0-132V132"/>'
+    b += f'<g class="orbit" stroke="{t["accent"]}" stroke-width="1.4">'
+    for angle in (0, 60, 120):
+        b += f'<ellipse rx="108" ry="37" transform="rotate({angle})"/>'
+    b += f'</g><circle r="29" fill="{t["panel"]}" stroke="{t["blue"]}" stroke-width="2"/></g>'
+    b += text(700, 210, '</>', t['blue'], 22, 700, True)
+    b += f'<circle cx="718" cy="94" r="5" fill="{t["accent"]}"/>'
+    b += text(32, 353, 'PYTHON + JAVASCRIPT', t['accent'], 12, 400, True)
+    b += text(615, 353, 'BUILD / EXPERIMENT / REPEAT', t['dim'], 11, 400, True)
+    return svg(900, 380, 'Ashutosh Thakur. Full-stack developer / AI & ML. Open to collaboration.', b,
+               '@keyframes orbit{to{transform:rotate(360deg)}}.orbit{animation:orbit 60s linear infinite}')
 
 
-def animate(attr, dur, frames, index):
-    times = ";".join(fmt(f[0] / dur) for f in frames)
-    values = ";".join(fmt(f[index]) for f in frames)
-    return (f'<animate attributeName="{attr}" dur="{fmt(dur)}s" repeatCount="indefinite"'
-            f' calcMode="discrete" keyTimes="{times}" values="{values}"/>')
+PROJECT_START = '<!-- PROJECTS:START -->'
+PROJECT_END = '<!-- PROJECTS:END -->'
 
 
-def svg(w, h, title, body, style=""):
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{fmt(h)}" '
-            f'viewBox="0 0 {w} {fmt(h)}" role="img" aria-label="{esc(title)}">'
-            f"<title>{esc(title)}</title><style>{style}{BASE_CSS}</style>{body}</svg>\n")
+def project(t, p, number):
+    name = p['name']
+    description = p.get('description') or 'Explore the code and project details on GitHub.'
+    names = textwrap.wrap(name, width=32, max_lines=2, placeholder='...')
+    lines = textwrap.wrap(description, width=49, max_lines=3, placeholder='...')
+    status = 'ARCHIVED' if p.get('archived') else ('FORK' if p.get('fork') else 'PUBLIC REPOSITORY')
+    b = rect(1, 1, 438, 231, t['panel'], 14, t['line'])
+    b += text(24, 34, f'{number:02d} / {status}', t['dim'], 11, 400, True)
+    b += text(401, 36, '\u2197', t['accent'], 24)
+    for i, line in enumerate(names):
+        b += text(24, 72+i*24, line, t['ink'], 19, 700, True)
+    for i, line in enumerate(lines):
+        b += text(24, 124+i*19, line, t['dim'], 12, mono=True)
+    b += f'<path d="M24 184H416" stroke="{t["line"]}"/>'
+    b += text(24, 211, (p.get('language') or 'CODE / EXPERIMENTS')[:40], t['blue'], 12, 400, True)
+    return svg(440, 232, f'{name}: {description}', b)
 
 
-# --------------------------------------------------------------------------
-# typewriter timelines
-# --------------------------------------------------------------------------
-
-def _type_track(t0, text, adv, type_dur, hold, del_dur, total):
-    """Char-by-char reveal width for one phrase inside a longer loop."""
-    n = max(len(text), 1)
-    frames = [(0.0, 0.0), (t0, 0.0)]
-    for k in range(1, n + 1):
-        frames.append((t0 + k * type_dur / n, k * adv))
-    frames.append((t0 + type_dur + hold, n * adv))
-    for k in range(n - 1, -1, -1):
-        frames.append((t0 + type_dur + hold + (n - k) * del_dur / n, k * adv))
-    frames.append((total, 0.0))
-    return dedupe(frames)
+def project_gallery(projects):
+    cards = []
+    for p in projects:
+        # GitHub's numeric repository ID survives renames and is safe in filenames.
+        stem = f'assets/project-{int(p["id"])}'
+        url = escape(p['url'], quote=True)
+        alt = escape(f'{p["name"]}: {p.get("description") or "View repository on GitHub."}', quote=True)
+        cards.append(f'<a href="{url}"><picture><source media="(prefers-color-scheme: dark)" '
+                     f'srcset="{stem}-dark.svg" /><img src="{stem}-light.svg" width="49%" '
+                     f'alt="{alt}" /></picture></a>')
+    return '\n'.join(cards) if cards else 'No public repositories with a README to show yet.'
 
 
-def caret(x_frames, total, y, size, colour, adv):
-    return (f'<rect y="{fmt(y - size * 0.78)}" width="{fmt(adv * 0.9)}" height="{fmt(size)}" '
-            f'rx="1" fill="{colour}">{animate("x", total, dedupe(x_frames), 1)}'
-            '<animate attributeName="opacity" values=".9;.9;0;0;.9" dur="1.06s" '
-            'repeatCount="indefinite"/></rect>')
+def updated_readme(projects):
+    path = OUT.parent / 'README.md'
+    content = path.read_text(encoding='utf-8')
+    if content.count(PROJECT_START) != 1 or content.count(PROJECT_END) != 1:
+        raise ValueError('README must contain exactly one PROJECTS:START / PROJECTS:END block')
+    before, rest = content.split(PROJECT_START)
+    _, after = rest.split(PROJECT_END)
+    return path, before + PROJECT_START + '\n' + project_gallery(projects) + '\n' + PROJECT_END + after
 
 
-def rotator(t, phrases, size, x, y, uid="rot", cps=0.075, hold=1.9, del_cps=0.032, gap=0.45):
-    """Type a phrase, hold, delete, move on. A phrase is hidden simply by being
-    clipped to zero width, so no separate visibility track is needed."""
-    adv = size * 0.6
-    slots, clock = [], 0.0
-    for p in phrases:
-        t_in, t_del = len(p) * cps, len(p) * del_cps
-        slots.append((clock, t_in, t_del, p))
-        clock += t_in + hold + t_del + gap
-    total = clock
-
-    parts, carets = [], []
-    for i, (t0, t_in, t_del, phrase) in enumerate(slots):
-        fr = _type_track(t0, phrase, adv, t_in, hold, t_del, total)
-        carets += [(f[0], x + f[1]) for f in fr]
-        parts.append(
-            f'<clipPath id="{uid}{i}"><rect x="{fmt(x)}" y="{fmt(y - size)}" '
-            f'height="{fmt(size * 1.45)}" width="0">{animate("width", total, fr, 1)}'
-            f'</rect></clipPath>'
-            f'<text x="{fmt(x)}" y="{fmt(y)}" clip-path="url(#{uid}{i})" font-family="{MONO}" '
-            f'font-size="{fmt(size)}" fill="{t["INK"]}">{esc(phrase)}</text>')
-    return "".join(parts) + caret(carets, total, y, size, t["A1"], adv)
-
-
-def commit_line(t, entries, slots, total, size, x, y, uid="cl"):
-    """One monospace line that retypes itself for whichever commit is landing."""
-    adv = size * 0.6
-    parts, carets = [], []
-    for i, ((sha, msg, colour), t0) in enumerate(zip(entries, slots)):
-        end = slots[i + 1] if i + 1 < len(slots) else total
-        text = f"{sha}  {msg}"
-        t_in = min(len(text) * 0.028, (end - t0) * 0.5)
-        t_del = 0.18
-        hold = max(end - t0 - t_in - t_del - 0.12, 0.1)
-        fr = _type_track(t0, text, adv, t_in, hold, t_del, total)
-        carets += [(f[0], x + f[1]) for f in fr]
-        parts.append(
-            f'<clipPath id="{uid}{i}"><rect x="{fmt(x)}" y="{fmt(y - size)}" '
-            f'height="{fmt(size * 1.5)}" width="0">{animate("width", total, fr, 1)}'
-            f'</rect></clipPath>'
-            f'<text x="{fmt(x)}" y="{fmt(y)}" clip-path="url(#{uid}{i})" font-family="{MONO}" '
-            f'font-size="{fmt(size)}" xml:space="preserve" fill="{t["INK"]}">'
-            f'<tspan fill="{colour}">{esc(sha)}</tspan>  {esc(msg)}</text>')
-    return "".join(parts) + caret(carets, total, y, size, t["A1"], adv)
+def activity(t):
+    commits = DATA.get('commits', [])
+    # Show the newest entries first, keeping long repository names/messages bounded.
+    recent = list(reversed(commits))[:5]
+    h = 107 + max(len(recent), 1)*48
+    b = rect(1, 1, 898, h-2, t['panel'], 16, t['line'])
+    b += text(26, 36, 'THE BUILD LOG', t['ink'], 14, 700, True)
+    b += text(620, 36, 'SNAPSHOT / '+DATA['fetched'], t['dim'], 12, 400, True)
+    b += f'<path d="M26 56H874" stroke="{t["line"]}"/>'
+    for i, c in enumerate(recent):
+        y = 89+i*48
+        if i < len(recent)-1:
+            b += f'<path d="M34 {y}v48" stroke="{t["line"]}" stroke-width="2"/>'
+        b += f'<circle cx="34" cy="{y-4}" r="5" fill="{t["accent"] if i == 0 else t["blue"]}"/>'
+        b += text(55, y, c['repo'][:24], t['ink'], 13, 700, True)
+        message = c['message']
+        if len(message) > 49:
+            message = message[:46]+'...'
+        b += text(275, y, message, t['dim'], 13)
+        b += text(803, y, c['sha'][:7], t['blue'], 12, 400, True)
+    if not recent:
+        b += text(26, 94, 'No recent commits in this snapshot.', t['dim'])
+    b += text(26, h-22, 'GITHUB API  /  Latest commits across public repositories', t['dim'], 11, 400, True)
+    return svg(900, h, 'Recent GitHub commits. Snapshot from '+DATA['fetched'], b)
 
 
-# --------------------------------------------------------------------------
-# header
-# --------------------------------------------------------------------------
-
-def build_header(t):
-    W, H = 900, 190
-    ramp = (f'<linearGradient id="rule" x1="0" x2="1">'
-            f'<stop offset="0" stop-color="{t["A1"]}"/><stop offset=".5" stop-color="{t["A2"]}"/>'
-            f'<stop offset="1" stop-color="{t["A3"]}" stop-opacity="0"/></linearGradient>')
-    shine = (f'<linearGradient id="shine" gradientUnits="userSpaceOnUse" x1="-320" x2="-60">'
-             f'<stop offset="0" stop-color="{t["INK"]}"/><stop offset=".42" stop-color="{t["INK"]}"/>'
-             f'<stop offset=".5" stop-color="{t["A2"]}"/><stop offset=".58" stop-color="{t["A1"]}"/>'
-             f'<stop offset="1" stop-color="{t["INK"]}"/>'
-             '<animate attributeName="x1" values="-320;900" dur="4.6s" repeatCount="indefinite"/>'
-             '<animate attributeName="x2" values="-60;1160" dur="4.6s" repeatCount="indefinite"/>'
-             "</linearGradient>")
-
-    motes = "".join(
-        f'<circle class="mote" cx="{cx}" cy="{cy}" r="{r}" fill="{c}" '
-        f'style="animation-duration:{d}s;animation-delay:-{dl}s"/>'
-        for cx, cy, r, c, d, dl in (
-            (742, 44, 2.2, t["A1"], 11, 0), (795, 96, 1.6, t["A2"], 9, 3),
-            (846, 58, 1.9, t["A3"], 13, 6), (700, 116, 1.4, t["A4"], 10, 1.5),
-            (868, 122, 2.0, t["A2"], 12, 8), (770, 150, 1.5, t["A1"], 14, 4)))
-
-    style = ("@keyframes mote{0%,100%{transform:translateY(0);opacity:.3}"
-             "50%{transform:translateY(-16px);opacity:.95}}"
-             "@keyframes rule{0%{stroke-dashoffset:300}40%,100%{stroke-dashoffset:0}}"
-             "@keyframes ping{0%{transform:scale(1);opacity:.85}75%,100%{transform:scale(3);opacity:0}}"
-             ".mote{animation:mote ease-in-out infinite}"
-             f".rule{{stroke-dasharray:300;animation:rule 5s {EASE} infinite}}"
-             ".ping{transform-origin:862px 34px;animation:ping 2.4s ease-out infinite}")
-
-    body = (
-        f"<defs>{ramp}{shine}</defs>{motes}"
-        f'<text x="4" y="76" font-family="{SANS}" font-size="52" font-weight="700" '
-        f'letter-spacing="-1.2" fill="url(#shine)">Ashutosh Thakur</text>'
-        f'<path class="rule" d="M6 98h300" stroke="url(#rule)" stroke-width="2.5" '
-        'stroke-linecap="round" fill="none"/>'
-        f'<text x="4" y="140" font-family="{MONO}" font-size="21" fill="{t["A1"]}">&#10095;</text>'
-        + rotator(t, ["full-stack developer", "AI / ML engineer",
-                      "LLM-backed developer tools", "workflow automation"], 21, 30, 140)
-        + f'<circle class="ping" cx="862" cy="34" r="4" fill="none" stroke="{t["A1"]}" stroke-width="1.5"/>'
-        f'<circle cx="862" cy="34" r="4" fill="{t["A1"]}"/>'
-        f'<text x="848" y="38" text-anchor="end" font-family="{MONO}" font-size="12" '
-        f'fill="{t["DIM"]}">open to collab</text>'
-        f'<text x="4" y="174" font-family="{MONO}" font-size="13" fill="{t["DIM"]}">'
-        "building tools that make hard things visible</text>")
-    return svg(W, H, "Ashutosh Thakur — full-stack developer, AI/ML", body, style)
-
-
-# --------------------------------------------------------------------------
-# activity — drawn from the real commit history in data.json
-# --------------------------------------------------------------------------
-
-def build_activity(t):
-    commits = DATA["commits"]
-    accents = [t["A1"], t["A2"], t["A3"], t["A4"]]
-
-    lanes = []
-    for c in commits:
-        if c["repo"] not in lanes:
-            lanes.append(c["repo"])
-    lane_y = {r: 84 + i * 52 for i, r in enumerate(lanes)}
-    lane_col = {r: accents[i % len(accents)] for i, r in enumerate(lanes)}
-
-    label_w = max(len(r) for r in lanes) * 7.3 + 26
-    x0, x1 = label_w + 16, 872
-    step = (x1 - x0) / max(len(commits) - 1, 1)
-    pos = [(x0 + i * step, lane_y[c["repo"]]) for i, c in enumerate(commits)]
-
-    slots = [0.7 + i * 1.55 for i in range(len(commits))]
-    total = slots[-1] + 2.4
-    bottom = 84 + (len(lanes) - 1) * 52
-    line_y = bottom + 78
-    H = line_y + 34
-
-    # a hairline per lane, then the real connections drawn over it
-    rails = "".join(
-        f'<path d="M{fmt(x0 - 10)} {lane_y[r]}H{x1 + 10}" stroke="{t["FAINT"]}" '
-        'stroke-width="1.5" fill="none"/>' for r in lanes)
-
-    links, last = [], {}
-    for i, c in enumerate(commits):
-        if c["repo"] in last:
-            j = last[c["repo"]]
-            links.append(
-                f'<path class="seg" d="M{fmt(pos[j][0])} {pos[j][1]}H{fmt(pos[i][0])}" '
-                f'pathLength="100" stroke="{lane_col[c["repo"]]}" fill="none" '
-                f'style="animation-delay:{fmt(slots[i] - 0.3)}s"/>')
-        last[c["repo"]] = i
-
-    labels = "".join(
-        f'<text x="4" y="{lane_y[r] + 4}" font-family="{MONO}" font-size="12.5" '
-        f'fill="{lane_col[r]}">{esc(r)}</text>' for r in lanes)
-
-    nodes = "".join(
-        f'<g transform="translate({fmt(x)},{y})">'
-        f'<g class="ping" style="animation-delay:{fmt(slots[i])}s">'
-        f'<circle r="8" fill="none" stroke="{lane_col[commits[i]["repo"]]}" stroke-width="2"/></g>'
-        f'<g class="n" style="animation-delay:{fmt(slots[i])}s">'
-        f'<circle r="8" fill="{t["PAGE"]}" stroke="{lane_col[commits[i]["repo"]]}" stroke-width="2.5"/>'
-        "</g></g>"
-        for i, (x, y) in enumerate(pos))
-
-    # marker that steps from commit to commit as each one lands
-    keytimes, values = ["0"], [f"{fmt(pos[0][0])} {pos[0][1]}"]
-    for i, (x, y) in enumerate(pos):
-        keytimes.append(fmt(slots[i] / total))
-        values.append(f"{fmt(x)} {y}")
-    keytimes.append("1")
-    values.append(values[-1])
-    marker = (f'<g opacity="0"><animateTransform attributeName="transform" type="translate" '
-              f'dur="{fmt(total)}s" repeatCount="indefinite" calcMode="discrete" '
-              f'keyTimes="{";".join(keytimes)}" values="{";".join(values)}"/>'
-              f'<animate attributeName="opacity" dur="{fmt(total)}s" repeatCount="indefinite" '
-              f'keyTimes="0;{fmt(slots[0] / total)};{fmt((slots[0] + 0.2) / total)};0.97;1" '
-              f'values="0;0;1;1;0"/>'
-              f'<circle r="14" fill="none" stroke="{t["INK"]}" stroke-opacity=".45" '
-              'stroke-width="1.5" stroke-dasharray="3 4"/></g>')
-
-    entries = [(c["sha"], c["message"], lane_col[c["repo"]]) for c in commits]
-    dates = f'{commits[0]["date"][:10]} → {commits[-1]["date"][:10]}'
-
-    style = ("@keyframes draw{0%{stroke-dashoffset:100}7%,100%{stroke-dashoffset:0}}"
-             "@keyframes pop{0%{transform:scale(0);opacity:0}3%{transform:scale(1.4);opacity:1}"
-             "6%,100%{transform:scale(1);opacity:1}}"
-             "@keyframes ping{0%{transform:scale(.5);opacity:.8}8%{transform:scale(3);opacity:0}"
-             "8.01%,100%{opacity:0}}"
-             f".seg{{stroke-dasharray:100;stroke-dashoffset:100;stroke-width:2.5;stroke-linecap:round;"
-             f"animation:draw {fmt(total)}s {EASE} infinite}}"
-             f".n{{opacity:0;transform-origin:0 0;animation:pop {fmt(total)}s {SPRING} infinite}}"
-             f".ping{{opacity:0;transform-origin:0 0;animation:ping {fmt(total)}s ease-out infinite}}")
-
-    body = (
-        f'<text x="4" y="30" font-family="{MONO}" font-size="13" fill="{t["DIM"]}">'
-        f'git log --oneline --all  <tspan fill="{t["FAINT"]}">·</tspan>  '
-        f'{esc(str(len(commits)))} most recent commits  '
-        f'<tspan fill="{t["FAINT"]}">·</tspan>  {esc(dates)}</text>'
-        + rails + "".join(links) + labels + nodes + marker
-        + f'<path d="M4 {bottom + 46}H872" stroke="{t["FAINT"]}" stroke-width="1"/>'
-        + commit_line(t, entries, slots, total, 14.5, 4, line_y))
-    return svg(900, H, f"Recent commit activity across {len(lanes)} repositories", body, style)
-
-
-# --------------------------------------------------------------------------
-# languages
-# --------------------------------------------------------------------------
-
-def build_langs(t):
-    langs = DATA["languages"]
-    accents = [t["A1"], t["A2"], t["A4"], t["A3"]]
-    total_bytes = sum(langs.values()) or 1
-
-    ranked = list(langs.items())
-    top = ranked[:5]
-    rest = sum(v for _, v in ranked[5:])
-    if rest:
-        top.append(("Other", rest))
-
-    def colour(i, name):
-        return t["FAINT"] if name == "Other" else accents[i % len(accents)]
-
-    W, BAR_Y, BAR_H = 900, 60, 22
-    BAR_X, BAR_W = 4, 868
-
-    segs, x = [], 0.0
+def langs(t):
+    ranked = sorted(DATA.get('languages', {}).items(), key=lambda p: p[1], reverse=True)
+    total = sum(v for _, v in ranked) or 1
+    top = ranked[:4]
+    if len(ranked) > 4:
+        top.append(('Other', sum(v for _, v in ranked[4:])))
+    b = text(2, 28, 'A toolkit for the whole stack.', t['ink'], 25, 700)
+    b += text(0, 57, f'{DATA["user"]["repos"]} public repositories / {len(ranked)} languages', t['dim'], 13, 400, True)
+    colors = [t['accent'], t['blue'], t['ink'], t['dim'], t['line']]
+    x = 0
     for i, (name, val) in enumerate(top):
-        w = BAR_W * val / total_bytes
-        segs.append(
-            f'<g transform="translate({fmt(BAR_X + x)},{BAR_Y})">'
-            f'<g class="grow" style="animation-delay:{fmt(0.2 + i * 0.11)}s">'
-            f'<rect width="{fmt(max(w, 2))}" height="{BAR_H}" fill="{colour(i, name)}"/>'
-            "</g></g>")
+        w = 900*val/total
+        b += rect(round(x, 3), 82, round(w, 3), 9, colors[i])
         x += w
-
-    legend, lx = [], 0.0
-    for i, (name, val) in enumerate(top):
-        pct = 100 * val / total_bytes
-        legend.append(
-            f'<g class="rise" style="animation-delay:{fmt(0.5 + i * 0.08)}s">'
-            f'<g transform="translate({fmt(BAR_X + lx)},{BAR_Y + 34})">'
-            f'<circle cx="5" cy="13" r="5" fill="{colour(i, name)}"/>'
-            f'<text x="17" y="17" font-family="{SANS}" font-size="13" fill="{t["INK"]}">'
-            f'{esc(name)} <tspan fill="{t["DIM"]}">{pct:.1f}%</tspan></text></g></g>')
-        lx += 34 + len(f"{name} {pct:.1f}%") * 7.1
-
-    def human(n):
-        return f"{n / (1 << 20):.1f} MB" if n >= 1 << 20 else f"{n / 1024:.0f} KB"
-
-    since = datetime.strptime(DATA["user"]["created_at"], "%Y-%m-%dT%H:%M:%SZ").strftime("%b %Y")
-    summary = (f'{DATA["user"]["repos"]} public repositories  ·  {len(langs)} languages  ·  '
-               f'{human(total_bytes)} of source  ·  since {since}')
-
-    style = ("@keyframes grow{0%{transform:scaleX(0)}12%,100%{transform:scaleX(1)}}"
-             "@keyframes rise{0%{opacity:0;transform:translateY(6px)}10%,100%{opacity:1;transform:translateY(0)}}"
-             "@keyframes sheen{0%,40%{transform:translateX(-200px)}70%,100%{transform:translateX(900px)}}"
-             f".grow{{transform-origin:0 0;animation:grow 11s {EASE} infinite}}"
-             f".rise{{opacity:0;animation:rise 11s {EASE} infinite}}"
-             ".sheen{animation:sheen 11s ease-in-out infinite}")
-
-    body = (
-        f'<defs><clipPath id="bar"><rect x="{BAR_X}" y="{BAR_Y}" width="{BAR_W}" '
-        f'height="{BAR_H}" rx="{BAR_H // 2}"/></clipPath>'
-        '<linearGradient id="sheen" x1="0" x2="1">'
-        f'<stop offset="0" stop-color="{t["INK"]}" stop-opacity="0"/>'
-        f'<stop offset=".5" stop-color="{t["INK"]}" stop-opacity=".22"/>'
-        f'<stop offset="1" stop-color="{t["INK"]}" stop-opacity="0"/></linearGradient></defs>'
-        f'<text x="4" y="26" font-family="{MONO}" font-size="13" fill="{t["DIM"]}">'
-        f'{esc(summary)}</text>'
-        f'<rect x="{BAR_X}" y="{BAR_Y}" width="{BAR_W}" height="{BAR_H}" rx="{BAR_H // 2}" '
-        f'fill="{t["FAINT"]}" fill-opacity=".55"/>'
-        f'<g clip-path="url(#bar)">{"".join(segs)}'
-        f'<rect class="sheen" y="{BAR_Y}" width="200" height="{BAR_H}" fill="url(#sheen)"/></g>'
-        + "".join(legend))
-    return svg(W, 128, "Language breakdown", body, style)
+        lx = i*180
+        b += rect(lx, 112, 7, 7, colors[i], 2)
+        b += text(lx+15, 120, name, t['ink'], 13)
+        b += text(lx+15, 143, f'{val/total:.1%}', t['dim'], 12, 400, True)
+    return svg(900, 162, 'Language breakdown by source bytes: '+', '.join(f'{k} {v/total:.1%}' for k,v in top), b)
 
 
-# --------------------------------------------------------------------------
-# divider / footer
-# --------------------------------------------------------------------------
-
-def build_divider(t):
-    W, H = 900, 18
-    style = ("@keyframes sweep{0%{transform:translateX(-260px)}100%{transform:translateX(900px)}}"
-             f".beam{{animation:sweep 6s {EASE} infinite}}")
-    body = (
-        "<defs>"
-        f'<linearGradient id="glow" x1="0" x2="1">'
-        f'<stop offset="0" stop-color="{t["A1"]}" stop-opacity="0"/>'
-        f'<stop offset=".5" stop-color="{t["A2"]}"/>'
-        f'<stop offset="1" stop-color="{t["A3"]}" stop-opacity="0"/></linearGradient>'
-        f'<clipPath id="strip"><rect width="{W}" height="{H}"/></clipPath></defs>'
-        f'<rect x="4" y="8" width="868" height="1.4" rx="1" fill="{t["FAINT"]}"/>'
-        '<g clip-path="url(#strip)">'
-        '<rect class="beam" y="7.2" width="260" height="3" rx="1.5" fill="url(#glow)"/></g>')
-    return svg(W, H, "", body, style)
+def footer(t):
+    b = rect(1, 1, 898, 104, t['panel'], 16, t['line'])
+    b += text(26, 44, 'Have something interesting in mind?', t['ink'], 25, 700)
+    b += text(26, 76, 'Let\u2019s build it together.', t['dim'], 17)
+    b += text(824, 68, '\u2197', t['accent'], 45)
+    return svg(900, 106, 'Have something interesting in mind? Let\u2019s build it together.', b)
 
 
-def build_footer(t):
-    W, H = 900, 96
-    wave = "q75 {a} 150 0" + "t150 0" * 10
-    style = ("@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-300px)}}"
-             "@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}"
-             "@keyframes ping{0%{transform:scale(1);opacity:.8}80%,100%{transform:scale(3);opacity:0}}"
-             ".w1{animation:roll 9s linear infinite}.w2{animation:roll 14s linear infinite reverse}"
-             ".w3{animation:roll 20s linear infinite}.bob{animation:bob 5s ease-in-out infinite}"
-             ".rng{transform-origin:450px 22px;animation:ping 2.6s ease-out infinite}")
-    waves = "".join(
-        f'<g transform="translate(-300,0)"><path class="w{i}" d="M0 {y}{wave.format(a=a)}V{H}H0Z" '
-        f'fill="url(#{g})" fill-opacity="{o}"/></g>'
-        for i, y, a, g, o in ((3, 54, -20, "g2", ".16"), (2, 62, -24, "g1", ".22"),
-                              (1, 70, -18, "g1", ".38")))
-    body = (
-        "<defs>"
-        f'<linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="{t["A1"]}"/>'
-        f'<stop offset=".5" stop-color="{t["A2"]}"/><stop offset="1" stop-color="{t["A3"]}"/>'
-        "</linearGradient>"
-        f'<linearGradient id="g2" x1="1" x2="0"><stop offset="0" stop-color="{t["A4"]}"/>'
-        f'<stop offset="1" stop-color="{t["A2"]}"/></linearGradient>'
-        f'<clipPath id="clip"><rect width="{W}" height="{H}"/></clipPath></defs>'
-        '<g clip-path="url(#clip)">'
-        f'<g class="bob"><circle class="rng" cx="450" cy="22" r="4.5" fill="none" '
-        f'stroke="{t["A2"]}" stroke-width="1.8"/>'
-        '<circle cx="450" cy="22" r="4.5" fill="url(#g1)"/></g>' + waves + "</g>")
-    return svg(W, H, "", body, style)
+def chip(t, label):
+    w = 130 if label == 'LinkedIn' else 148
+    b = rect(1, 1, w-2, 36, t['panel'], 8, t['line'])
+    b += text(15, 25, label, t['ink'], 13, 700, True)
+    b += text(w-29, 25, '\u2197', t['accent'], 17)
+    return svg(w, 38, label, b)
 
 
-def chip(t, label, accent_key, glyph):
-    """A contact pill. Shields.io badges can't follow the reader's theme, so a
-    fixed dark badge would be the same pasted-on rectangle this file exists to
-    avoid — these are drawn per colourway instead."""
-    a = t[accent_key]
-    w = 46 + len(label) * 7.4
-    style = ("@keyframes hum{0%,100%{opacity:.55;transform:scale(.9)}50%{opacity:1;transform:scale(1.15)}}"
-             "@keyframes slide{0%,55%{transform:translateX(-70px)}85%,100%{transform:translateX("
-             + str(int(w) + 70) + "px)}}"
-             ".dot{transform-origin:24px 18px;animation:hum 3.2s ease-in-out infinite}"
-             ".sheen{animation:slide 7s " + EASE + " infinite}")
-    body = (
-        f'<defs><clipPath id="pill"><rect x="1" y="1" width="{fmt(w - 2)}" height="34" rx="17"/></clipPath>'
-        f'<linearGradient id="sh" x1="0" x2="1"><stop offset="0" stop-color="{a}" stop-opacity="0"/>'
-        f'<stop offset=".5" stop-color="{a}" stop-opacity=".22"/>'
-        f'<stop offset="1" stop-color="{a}" stop-opacity="0"/></linearGradient></defs>'
-        f'<rect x="1" y="1" width="{fmt(w - 2)}" height="34" rx="17" fill="{a}" fill-opacity=".07" '
-        f'stroke="{a}" stroke-opacity=".55"/>'
-        f'<g clip-path="url(#pill)"><rect class="sheen" y="1" width="70" height="34" fill="url(#sh)"/></g>'
-        f'<circle class="dot" cx="24" cy="18" r="4" fill="{a}"/>'
-        f'<text x="38" y="23" font-family="{SANS}" font-size="13" font-weight="500" '
-        f'fill="{t["INK"]}">{esc(label)}</text>')
-    return svg(int(w), 36, glyph, body, style)
+def build():
+    builders = dict(header=header, activity=activity, langs=langs, footer=footer)
+    builders['chip-email'] = lambda t: chip(t, 'Say hello')
+    builders['chip-linkedin'] = lambda t: chip(t, 'LinkedIn')
+    if 'projects' not in DATA:
+        raise ValueError('Repository metadata is missing. Run python assets/fetch.py first.')
+    if any('has_readme' not in p for p in DATA['projects']):
+        raise ValueError('README metadata is missing. Run python assets/fetch.py first.')
+    projects = sorted((p for p in DATA['projects'] if p['has_readme']),
+                      key=lambda p: p['name'].casefold())
+    readme_path, readme = updated_readme(projects)
+    for number, p in enumerate(projects, 1):
+        builders[f'project-{int(p["id"])}'] = lambda t, p=p, n=number: project(t, p, n)
+    for theme, tokens in THEMES.items():
+        for name, builder in builders.items():
+            (OUT/f'{name}-{theme}.svg').write_text(builder(tokens), encoding='utf-8')
+        print(f'{theme}: generated {len(builders)} assets')
+    readme_path.write_text(readme, encoding='utf-8')
+    expected = {f'{name}-{theme}.svg' for name in builders for theme in THEMES}
+    for old in OUT.glob('project-*.svg'):
+        if old.name not in expected:
+            old.unlink()
+    print(f'Updated README with {len(projects)} project cards')
 
 
-BUILDERS = {
-    "header": build_header, "activity": build_activity, "langs": build_langs,
-    "divider": build_divider, "footer": build_footer,
-    "chip-email": lambda t: chip(t, "thakurashutosh042003@gmail.com", "A1", "Email"),
-    "chip-linkedin": lambda t: chip(t, "linkedin.com/in/ashutosh-thakur", "A2", "LinkedIn"),
-}
-
-
-if __name__ == "__main__":
-    for theme, tok in THEMES.items():
-        worst = min(((contrast(tok[k], tok["PAGE"]), k) for k in
-                     ("INK", "DIM", "A1", "A2", "A3", "A4")))
-        for name, fn in BUILDERS.items():
-            (OUT / f"{name}-{theme}.svg").write_text(fn(tok), encoding="utf-8")
-        print(f"{theme:5s} -> {len(BUILDERS)} svgs   lowest contrast on page: "
-              f"{worst[1]} {worst[0]:.2f}:1 {'OK' if worst[0] >= 4.5 else 'FAILS AA'}")
-    print(f"data from {DATA['fetched']} - {len(DATA['commits'])} commits, "
-          f"{DATA['user']['repos']} repos")
+if __name__ == '__main__':
+    build()

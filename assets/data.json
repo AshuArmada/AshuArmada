@@ -1,73 +1,145 @@
 {
- "fetched": "2026-08-04",
+ "fetched": "2026-09-14",
  "user": {
-  "login": "AshuArmada",
-  "created_at": "2024-10-26T10:19:09Z",
-  "repos": 15
+  "repos": 16
  },
  "languages": {
+  "Python": 868242,
   "TypeScript": 672931,
-  "Python": 514498,
-  "JavaScript": 446306,
-  "CSS": 252448,
+  "JavaScript": 455533,
+  "CSS": 297792,
+  "HTML": 98615,
   "C#": 13950,
-  "HTML": 4604,
+  "Batchfile": 7334,
   "C++": 4567,
   "Jinja": 2560,
+  "Shell": 1995,
   "Dockerfile": 1948,
-  "Shell": 1735,
   "Mako": 704,
   "Java": 29
  },
+ "projects": [
+  {
+   "id": 918906835,
+   "name": "ADA",
+   "url": "https://github.com/AshuArmada/ADA",
+   "description": "programs of algorithms ",
+   "language": "C++",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1090679248,
+   "name": "aqi",
+   "url": "https://github.com/AshuArmada/aqi",
+   "description": "",
+   "language": "Python",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1322846750,
+   "name": "AshuArmada",
+   "url": "https://github.com/AshuArmada/AshuArmada",
+   "description": "",
+   "language": "Python",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1265444681,
+   "name": "gitify",
+   "url": "https://github.com/AshuArmada/gitify",
+   "description": "",
+   "language": "JavaScript",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1301928220,
+   "name": "informer-",
+   "url": "https://github.com/AshuArmada/informer-",
+   "description": "",
+   "language": "TypeScript",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1294163791,
+   "name": "nexus-retool",
+   "url": "https://github.com/AshuArmada/nexus-retool",
+   "description": "",
+   "language": "TypeScript",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1324097908,
+   "name": "ReelFactory",
+   "url": "https://github.com/AshuArmada/ReelFactory",
+   "description": "",
+   "language": "Python",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1115654013,
+   "name": "REVCLERX_ASHUTOSH_RESUME_ANALYSER",
+   "url": "https://github.com/AshuArmada/REVCLERX_ASHUTOSH_RESUME_ANALYSER",
+   "description": "AN AI MATCHING SYSTEM BUILT WITH N8N AND AI MODEL USED -GOOGLE GEMINI",
+   "language": "",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  },
+  {
+   "id": 1039482909,
+   "name": "spam-ham",
+   "url": "https://github.com/AshuArmada/spam-ham",
+   "description": "a simple ai project that classifies whether a message is spam or ham",
+   "language": "Python",
+   "fork": false,
+   "archived": false,
+   "has_readme": true
+  }
+ ],
  "commits": [
   {
-   "repo": "informer-",
-   "branch": "main",
-   "sha": "558077d",
-   "message": "too many requests to github if users has ma\u2026",
-   "date": "2026-07-19T19:32:43Z"
+   "repo": "study",
+   "sha": "3724aa8",
+   "message": "liner regression 1st commit",
+   "date": "2026-09-11T18:10:04Z"
   },
   {
-   "repo": "informer-",
-   "branch": "main",
-   "sha": "7424e4e",
-   "message": "handling  multiple requests",
-   "date": "2026-07-20T17:24:16Z"
-  },
-  {
-   "repo": "informer-",
-   "branch": "main",
-   "sha": "d5937a4",
-   "message": "update styling for improved layout and acce\u2026",
-   "date": "2026-07-24T17:41:56Z"
+   "repo": "study",
+   "sha": "12eb202",
+   "message": "done with pandas",
+   "date": "2026-09-11T19:01:46Z"
   },
   {
    "repo": "AshuArmada",
-   "branch": "main",
-   "sha": "4f95e4b",
-   "message": "overall changes",
-   "date": "2026-08-04T15:24:00Z"
+   "sha": "ea790d6",
+   "message": "chore: refresh profile assets",
+   "date": "2026-09-12T08:04:16Z"
   },
   {
    "repo": "AshuArmada",
-   "branch": "main",
-   "sha": "4a58935",
-   "message": "overall changes 2",
-   "date": "2026-08-04T15:24:12Z"
+   "sha": "6f39479",
+   "message": "chore: refresh profile assets",
+   "date": "2026-09-13T08:28:54Z"
   },
   {
    "repo": "AshuArmada",
-   "branch": "main",
-   "sha": "3fd96d0",
-   "message": "updates",
-   "date": "2026-08-04T16:26:27Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "branch": "main",
-   "sha": "bbf47fa",
-   "message": "stat card",
-   "date": "2026-08-04T16:58:46Z"
+   "sha": "3486d4a",
+   "message": "chore: refresh profile assets",
+   "date": "2026-09-14T09:10:52Z"
   }
  ]
 }
