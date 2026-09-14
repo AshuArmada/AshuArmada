@@ -199,15 +199,16 @@ def langs(t):
 
 
 def footer(t):
-    b = rect(1, 1, 898, 104, t['panel'], 16, t['line'])
-    b += text(26, 44, 'Have something interesting in mind?', t['ink'], 25, 700)
+    b = rect(1, 1, 898, 136, t['panel'], 16, t['line'])
+    b += text(26, 44, 'Connect with me', t['ink'], 25, 700)
     b += text(26, 76, 'Let\u2019s build it together.', t['dim'], 17)
-    b += text(824, 68, '\u2197', t['accent'], 45)
-    return svg(900, 106, 'Have something interesting in mind? Let\u2019s build it together.', b)
+    b += text(26, 110, 'thakurashutosh042003@gmail.com', t['accent'], 17, mono=True)
+    b += text(824, 84, '\u2197', t['accent'], 45)
+    return svg(900, 138, 'Connect with me: thakurashutosh042003@gmail.com', b)
 
 
 def chip(t, label):
-    w = 130 if label == 'LinkedIn' else 148
+    w = max(130, len(label) * 8 + 58)
     b = rect(1, 1, w-2, 36, t['panel'], 8, t['line'])
     b += text(15, 25, label, t['ink'], 13, 700, True)
     b += text(w-29, 25, '\u2197', t['accent'], 17)
@@ -216,7 +217,7 @@ def chip(t, label):
 
 def build():
     builders = dict(header=header, activity=activity, langs=langs, footer=footer, contributions=contributions)
-    builders['chip-email'] = lambda t: chip(t, 'Say hello')
+    builders['chip-email'] = lambda t: chip(t, 'thakurashutosh042003@gmail.com')
     builders['chip-linkedin'] = lambda t: chip(t, 'LinkedIn')
     if 'projects' not in DATA:
         raise ValueError('Repository metadata is missing. Run python assets/fetch.py first.')

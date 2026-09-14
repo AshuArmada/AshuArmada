@@ -5,7 +5,7 @@
 
 <br>
 
-<a href="mailto:thakurashutosh042003@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-email-dark.svg" /><img src="assets/chip-email-light.svg" alt="Say hello by email" height="38" /></picture></a>
+<a href="mailto:thakurashutosh042003@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-email-dark.svg" /><img src="assets/chip-email-light.svg" alt="Email: thakurashutosh042003@gmail.com" height="38" /></picture></a>
 <a href="https://www.linkedin.com/in/ashutosh-thakur-8146121b0/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-linkedin-dark.svg" /><img src="assets/chip-linkedin-light.svg" alt="Connect on LinkedIn" height="38" /></picture></a>
 
 I build at the intersection of **the web and machine learning** — LLM-backed tools, useful automations, and developer experiences that make complex things easier to understand.
@@ -72,7 +72,7 @@ I build at the intersection of **the web and machine learning** — LLM-backed t
 
 <a href="mailto:thakurashutosh042003@gmail.com"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg" />
-  <img src="assets/footer-light.svg" width="900" alt="Have something interesting in mind? Let's build it together. Email Ashutosh." />
+  <img src="assets/footer-light.svg" width="900" alt="Connect with me: thakurashutosh042003@gmail.com" />
 </picture></a>
 
 <sub>Open to collaborating on developer tools and applied ML. [thakurashutosh042003@gmail.com](mailto:thakurashutosh042003@gmail.com)</sub>
