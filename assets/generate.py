@@ -33,29 +33,39 @@ def svg(w, h, title, body, css=''):
 
 
 def header(t):
-    b = rect(1, 1, 898, 378, t['panel'], 22, t['line'])
-    b += text(32, 40, 'AT / ASHUARMADA', t['ink'], 13, 700, True)
-    b += '<circle cx="690" cy="35" r="4" fill="'+t['accent']+'"/>'
-    b += text(705, 40, 'OPEN TO COLLAB', t['accent'], 12, 400, True)
-    b += f'<path d="M32 60H868" stroke="{t["line"]}"/>'
-    b += text(32, 99, 'FULL-STACK DEVELOPER  /  AI & ML', t['dim'], 12, 400, True)
-    b += text(28, 164, 'Ashutosh', t['ink'], 66, 700, extra='letter-spacing="-3"')
-    b += text(28, 231, 'Thakur.', t['ink'], 66, 700, extra='letter-spacing="-3"')
-    b += text(32, 277, 'Turning complex ideas', t['dim'], 22)
-    b += text(32, 307, 'into tools that just work.', t['ink'], 22)
-    # A wireframe orbital mark: native vector art, no external image dependencies.
-    b += f'<g transform="translate(718 202)" fill="none" stroke="{t["line"]}">'
-    b += '<circle r="108"/><circle r="80" stroke-dasharray="2 7"/><path d="M-132 0H132M0-132V132"/>'
-    b += f'<g class="orbit" stroke="{t["accent"]}" stroke-width="1.4">'
-    for angle in (0, 60, 120):
-        b += f'<ellipse rx="108" ry="37" transform="rotate({angle})"/>'
-    b += f'</g><circle r="29" fill="{t["panel"]}" stroke="{t["blue"]}" stroke-width="2"/></g>'
-    b += text(700, 210, '</>', t['blue'], 22, 700, True)
-    b += f'<circle cx="718" cy="94" r="5" fill="{t["accent"]}"/>'
-    b += text(32, 353, 'PYTHON + JAVASCRIPT', t['accent'], 12, 400, True)
-    b += text(615, 353, 'BUILD / EXPERIMENT / REPEAT', t['dim'], 11, 400, True)
-    return svg(900, 380, 'Ashutosh Thakur. Full-stack developer / AI & ML. Open to collaboration.', b,
-               '@keyframes orbit{to{transform:rotate(360deg)}}.orbit{animation:orbit 60s linear infinite}')
+    # Native SVG gradients keep the artwork self-contained in GitHub's image proxy.
+    b = '<defs><clipPath id="header-clip"><rect x="1" y="1" width="898" height="328" rx="20"/></clipPath>'
+    for name, color in (('blue', t['blue']), ('green', t['accent'])):
+        b += (f'<radialGradient id="header-{name}">'
+              f'<stop stop-color="{color}" stop-opacity=".16"/>'
+              f'<stop offset="1" stop-color="{color}" stop-opacity="0"/></radialGradient>')
+    b += (f'<pattern id="header-dots" width="20" height="20" patternUnits="userSpaceOnUse">'
+          f'<circle cx="10" cy="10" r=".8" fill="{t["dim"]}" fill-opacity=".16"/></pattern></defs>')
+    b += rect(1, 1, 898, 328, t['panel'], 20)
+    b += '<g clip-path="url(#header-clip)" aria-hidden="true">'
+    b += '<ellipse cx="110" cy="290" rx="370" ry="280" fill="url(#header-blue)"/>'
+    b += '<ellipse cx="820" cy="70" rx="350" ry="270" fill="url(#header-green)"/>'
+    b += rect(0, 0, 175, 330, 'url(#header-dots)')
+    b += rect(725, 0, 175, 330, 'url(#header-dots)')
+    b += '</g>'
+    b += rect(1, 1, 898, 328, 'none', 20, t['line'])
+    b += text(30, 39, 'ASHUARMADA', t['dim'], 12, 700, True, extra='letter-spacing="1.8"')
+    b += f'<circle cx="714" cy="34" r="3.5" fill="{t["accent"]}"/>'
+    b += text(727, 39, 'Open to collaborate', t['dim'], 13)
+    center = 'text-anchor="middle"'
+    b += text(450, 105, 'FULL-STACK DEVELOPER  /  AI & ML', t['accent'], 12, 700, True,
+              extra=center+' letter-spacing="1.5"')
+    b += text(450, 174, 'Ashutosh Thakur.', t['ink'], 64, 700,
+              extra=center+' letter-spacing="-2.8"')
+    b += text(450, 213, 'Turning complex ideas into tools that just work.', t['dim'], 20,
+              extra=center)
+    for x, width, label, color in ((239, 116, 'Web apps', t['blue']),
+                                 (367, 124, 'Applied ML', t['accent']),
+                                 (503, 158, 'Developer tools', t['blue'])):
+        b += rect(x, 247, width, 32, t['panel'], 16, t['line'])
+        b += f'<circle cx="{x+17}" cy="263" r="3" fill="{color}"/>'
+        b += text(x+28, 267, label, t['ink'], 12)
+    return svg(900, 330, 'Ashutosh Thakur. Full-stack developer / AI & ML. Open to collaboration.', b)
 
 
 PROJECT_START = '<!-- PROJECTS:START -->'
