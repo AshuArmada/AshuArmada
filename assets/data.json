@@ -1,10 +1,10 @@
 {
- "fetched": "2026-09-16",
+ "fetched": "2026-09-17",
  "user": {
   "repos": 16
  },
  "languages": {
-  "Python": 872728,
+  "Python": 873261,
   "TypeScript": 672931,
   "JavaScript": 455533,
   "CSS": 297792,
@@ -112,34 +112,34 @@
  ],
  "commits": [
   {
-   "repo": "study",
-   "sha": "3724aa8",
-   "message": "liner regression 1st commit",
-   "date": "2026-09-11T18:10:04Z"
+   "repo": "ReelFactory",
+   "sha": "0d6e504",
+   "message": "final changes phase 1",
+   "date": "2026-08-13T08:19:43Z"
   },
   {
-   "repo": "study",
-   "sha": "12eb202",
-   "message": "done with pandas",
-   "date": "2026-09-11T19:01:46Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "sha": "70ff116",
-   "message": "update1.2. color and opensourse contribution",
-   "date": "2026-09-14T10:47:31Z"
+   "repo": "ReelFactory",
+   "sha": "7ec5380",
+   "message": "Merge pull request #2 from AshuArmada/new",
+   "date": "2026-08-27T10:03:13Z"
   },
   {
    "repo": "AshuArmada",
-   "sha": "f21677e",
-   "message": "update added email",
-   "date": "2026-09-14T10:50:49Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "sha": "eb32f95",
+   "sha": "b29f086",
    "message": "chore: refresh profile assets",
-   "date": "2026-09-15T08:53:14Z"
+   "date": "2026-09-16T08:46:43Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "sha": "e179a9b",
+   "message": "intro card update",
+   "date": "2026-09-16T20:04:04Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "sha": "79d6837",
+   "message": "Merge branch 'main' of https://github.com/A\u2026",
+   "date": "2026-09-16T20:04:09Z"
   }
  ],
  "contributions": {
