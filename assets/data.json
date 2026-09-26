@@ -1,10 +1,10 @@
 {
- "fetched": "2026-09-25",
+ "fetched": "2026-09-26",
  "user": {
   "repos": 16
  },
  "languages": {
-  "Python": 873261,
+  "Python": 873623,
   "TypeScript": 672931,
   "JavaScript": 455533,
   "CSS": 297792,
@@ -124,22 +124,22 @@
    "date": "2026-08-27T10:03:13Z"
   },
   {
-   "repo": "AshuArmada",
-   "sha": "088b14e",
-   "message": "chore: refresh profile assets",
-   "date": "2026-09-22T08:44:27Z"
+   "repo": "study",
+   "sha": "3724aa8",
+   "message": "liner regression 1st commit",
+   "date": "2026-09-11T18:10:04Z"
   },
   {
-   "repo": "AshuArmada",
-   "sha": "0f0a7a9",
-   "message": "chore: refresh profile assets",
-   "date": "2026-09-23T08:45:53Z"
+   "repo": "study",
+   "sha": "12eb202",
+   "message": "done with pandas",
+   "date": "2026-09-11T19:01:46Z"
   },
   {
-   "repo": "AshuArmada",
-   "sha": "18506db",
-   "message": "chore: refresh profile assets",
-   "date": "2026-09-24T08:40:16Z"
+   "repo": "study",
+   "sha": "d67a7f7",
+   "message": "problem 1",
+   "date": "2026-09-25T17:16:24Z"
   }
  ],
  "contributions": {
