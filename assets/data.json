@@ -1,20 +1,21 @@
 {
- "fetched": "2026-09-29",
+ "fetched": "2026-09-30",
  "user": {
   "repos": 16
  },
  "languages": {
-  "Python": 873623,
+  "Python": 1121215,
   "TypeScript": 672931,
-  "JavaScript": 455533,
-  "CSS": 297792,
-  "HTML": 98615,
+  "JavaScript": 463646,
+  "CSS": 308421,
+  "HTML": 128020,
   "C#": 13950,
-  "Batchfile": 7334,
+  "Batchfile": 6265,
   "C++": 4567,
   "Jinja": 2560,
   "Shell": 1995,
   "Dockerfile": 1948,
+  "PowerShell": 1340,
   "Mako": 704,
   "Java": 29
  },
@@ -83,7 +84,7 @@
    "id": 1324097908,
    "name": "ReelFactory",
    "url": "https://github.com/AshuArmada/ReelFactory",
-   "description": "Drop product photos in a folder, fill in a few facts, run one command. You get a narrated vertical video with on-screen text and a ready-to-paste Facebook",
+   "description": "Add product photos and a few facts in the browser, or use the CLI. You get a narrated vertical video with on-screen text and a ready-to-paste Facebook",
    "language": "Python",
    "fork": false,
    "archived": false,
@@ -112,34 +113,34 @@
  ],
  "commits": [
   {
-   "repo": "study",
-   "sha": "12eb202",
-   "message": "done with pandas",
-   "date": "2026-09-11T19:01:46Z"
-  },
-  {
-   "repo": "study",
-   "sha": "d67a7f7",
-   "message": "problem 1",
-   "date": "2026-09-25T17:16:24Z"
+   "repo": "ReelFactory",
+   "sha": "1731905",
+   "message": "hindi script updation",
+   "date": "2026-09-29T17:15:02Z"
   },
   {
    "repo": "AshuArmada",
-   "sha": "c565d75",
+   "sha": "437946b",
    "message": "chore: refresh profile assets",
-   "date": "2026-09-29T10:02:57Z"
+   "date": "2026-09-29T17:38:03Z"
   },
   {
    "repo": "AshuArmada",
-   "sha": "445cef6",
-   "message": "Added git pull --rebase before git push",
-   "date": "2026-09-29T17:33:24Z"
+   "sha": "aa1fa53",
+   "message": "Updated [refresh.yml (line 15)](/C:/Users/H\u2026",
+   "date": "2026-09-29T17:40:22Z"
   },
   {
    "repo": "AshuArmada",
-   "sha": "4e7cf63",
+   "sha": "2aca8c7",
    "message": "Merge branch 'main' of https://github.com/A\u2026",
-   "date": "2026-09-29T17:33:34Z"
+   "date": "2026-09-29T17:40:27Z"
+  },
+  {
+   "repo": "ReelFactory",
+   "sha": "7288ae0",
+   "message": "Merge pull request #3 from AshuArmada/new",
+   "date": "2026-09-29T17:44:30Z"
   }
  ],
  "contributions": {
