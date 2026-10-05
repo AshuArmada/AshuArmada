@@ -1,5 +1,5 @@
 {
- "fetched": "2026-10-04",
+ "fetched": "2026-10-05",
  "user": {
   "repos": 16
  },
@@ -113,12 +113,6 @@
  ],
  "commits": [
   {
-   "repo": "AshuArmada",
-   "sha": "063b09e",
-   "message": "chore: refresh profile assets",
-   "date": "2026-10-02T09:58:47Z"
-  },
-  {
    "repo": "ReelFactory",
    "sha": "aaf0f36",
    "message": "api settingpage ui/ux changes",
@@ -141,6 +135,12 @@
    "sha": "5a4b5b9",
    "message": "Merge pull request #1 from AshuArmada/polis\u2026",
    "date": "2026-10-03T17:10:16Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "sha": "166e5aa",
+   "message": "chore: refresh profile assets",
+   "date": "2026-10-04T10:00:06Z"
   }
  ],
  "contributions": {
