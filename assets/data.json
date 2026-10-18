@@ -1,14 +1,14 @@
 {
- "fetched": "2026-10-17",
+ "fetched": "2026-10-18",
  "user": {
   "repos": 16
  },
  "languages": {
-  "Python": 1331477,
+  "Python": 1474564,
   "TypeScript": 749637,
-  "JavaScript": 492374,
-  "CSS": 322402,
-  "HTML": 145294,
+  "JavaScript": 498938,
+  "CSS": 325717,
+  "HTML": 172654,
   "Jinja": 17512,
   "C#": 13950,
   "PowerShell": 8632,
@@ -113,34 +113,34 @@
  ],
  "commits": [
   {
-   "repo": "informer-",
-   "sha": "2249c81",
-   "message": "feat: improve contribution discovery and re\u2026",
-   "date": "2026-10-06T17:00:43Z"
-  },
-  {
-   "repo": "informer-",
-   "sha": "f58bcc4",
-   "message": "Merge pull request #2 from AshuArmada/polis\u2026",
-   "date": "2026-10-06T18:24:19Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "sha": "e8becaf",
-   "message": "chore: refresh profile assets",
-   "date": "2026-10-14T08:56:49Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "sha": "24b590d",
-   "message": "chore: refresh profile assets",
-   "date": "2026-10-15T08:30:49Z"
-  },
-  {
    "repo": "AshuArmada",
    "sha": "dc95308",
    "message": "chore: refresh profile assets",
    "date": "2026-10-16T08:24:52Z"
+  },
+  {
+   "repo": "ReelFactory",
+   "sha": "ac8cce7",
+   "message": "fix: improve script editing and reel creati\u2026",
+   "date": "2026-10-16T12:20:05Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "sha": "e506144",
+   "message": "chore: refresh profile assets",
+   "date": "2026-10-17T07:58:00Z"
+  },
+  {
+   "repo": "ReelFactory",
+   "sha": "7be3f2b",
+   "message": "fix: preserve script drafts and harden save\u2026",
+   "date": "2026-10-17T18:59:47Z"
+  },
+  {
+   "repo": "ReelFactory",
+   "sha": "d194ff3",
+   "message": "Merge pull request #5 from AshuArmada/new",
+   "date": "2026-10-17T19:02:56Z"
   }
  ],
  "contributions": {
