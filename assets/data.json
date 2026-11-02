@@ -1,10 +1,10 @@
 {
- "fetched": "2026-11-01",
+ "fetched": "2026-11-02",
  "user": {
   "repos": 16
  },
  "languages": {
-  "Python": 1606396,
+  "Python": 1606424,
   "TypeScript": 749637,
   "JavaScript": 529950,
   "CSS": 327790,
@@ -114,21 +114,9 @@
  "commits": [
   {
    "repo": "ReelFactory",
-   "sha": "31a9613",
-   "message": "docker version",
-   "date": "2026-10-25T17:44:28Z"
-  },
-  {
-   "repo": "ReelFactory",
    "sha": "6b2f4c4",
    "message": "Merge pull request #6 from AshuArmada/new",
    "date": "2026-10-25T18:01:38Z"
-  },
-  {
-   "repo": "AshuArmada",
-   "sha": "2b4eb7d",
-   "message": "chore: refresh profile assets",
-   "date": "2026-10-29T10:18:39Z"
   },
   {
    "repo": "AshuArmada",
@@ -141,6 +129,18 @@
    "sha": "f9933ca",
    "message": "chore: refresh profile assets",
    "date": "2026-10-31T09:52:49Z"
+  },
+  {
+   "repo": "AshuArmada",
+   "sha": "89eea70",
+   "message": "chore: refresh profile assets",
+   "date": "2026-11-01T10:43:24Z"
+  },
+  {
+   "repo": "study",
+   "sha": "72f234e",
+   "message": "simple program to get the pid",
+   "date": "2026-11-02T10:07:52Z"
   }
  ],
  "contributions": {
